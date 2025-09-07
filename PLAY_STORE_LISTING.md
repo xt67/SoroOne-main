@@ -1,16 +1,16 @@
-# Dashly - Play Store Listing Information
+# SoroOne - Play Store Listing Information
 
 ## App Title
-Dashly - Data Analytics & Visualization
+SoroOne - Data Analytics & Visualization
 
 ## Short Description
 Transform your data into beautiful dashboards with AI-powered insights
 
 ## Full Description
 
-**Turn Your Data Into Actionable Insights with Dashly**
+**Turn Your Data Into Actionable Insights with SoroOne**
 
-Dashly is a powerful mobile data analytics app that transforms your spreadsheets and databases into beautiful, interactive dashboards. Whether you're a business professional, data analyst, or student, Dashly makes data visualization accessible and intuitive.
+SoroOne is a powerful mobile data analytics app that transforms your spreadsheets and databases into beautiful, interactive dashboards. Whether you're a business professional, data analyst, or student, SoroOne makes data visualization accessible and intuitive.
 
 **🚀 Key Features:**
 • Import Excel, CSV, and SQL files effortlessly
@@ -52,10 +52,10 @@ Dashly is a powerful mobile data analytics app that transforms your spreadsheets
 • Priority customer support
 • Additional color schemes and themes
 
-Download Dashly today and transform the way you work with data!
+Download SoroOne today and transform the way you work with data!
 
-**Support:** support@dashly.app
-**Website:** https://dashly.app
+**Support:** support@soroone.app
+**Website:** https://soroone.app
 
 ## Keywords
 data visualization, analytics, dashboard, charts, excel, csv, sql, business intelligence, reporting, insights

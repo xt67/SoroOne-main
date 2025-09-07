@@ -1,4 +1,4 @@
-# Dashly Mobile App - Progress Report
+# SoroOne Mobile App - Progress Report
 
 ## 🎯 Project Overview
 A cross-platform React Native/Expo mobile app for data visualization and analytics, targeting data analysts, business professionals, and students.
@@ -241,4 +241,4 @@ npm run web
 7. Add comprehensive testing suite
 8. Optimize for production deployment
 
-The Dashly app is now in a functional state with core features implemented. Users can import data files, view sample visualizations, and interact with AI-powered insights. The foundation is solid for continued development of advanced features.
+The SoroOne app is now in a functional state with core features implemented. Users can import data files, view sample visualizations, and interact with AI-powered insights. The foundation is solid for continued development of advanced features.

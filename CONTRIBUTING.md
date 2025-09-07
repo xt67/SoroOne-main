@@ -35,7 +35,7 @@ Thank you for your interest in contributing to SoroOne! We welcome contributions
 
 ### 🐛 Reporting Bugs
 
-Before creating bug reports, please check the [existing issues](https://github.com/xt67/Dashly-1.0/issues) to avoid duplicates.
+Before creating bug reports, please check the [existing issues](https://github.com/xt67/SoroOne-main/issues) to avoid duplicates.
 
 **Great bug reports include:**
 - Clear, descriptive title
@@ -220,8 +220,8 @@ Use the predefined color schemes in `src/styles/theme.ts`:
 ## 🆘 Getting Help
 
 ### Where to Ask Questions
-- **General questions**: [GitHub Discussions](https://github.com/xt67/Dashly-1.0/discussions)
-- **Bug reports**: [GitHub Issues](https://github.com/xt67/Dashly-1.0/issues)
+- **General questions**: [GitHub Discussions](https://github.com/xt67/SoroOne-main/discussions)
+- **Bug reports**: [GitHub Issues](https://github.com/xt67/SoroOne-main/issues)
 - **Development help**: Comment on your PR or issue
 
 ### Documentation
@@ -238,8 +238,8 @@ Contributors are recognized in:
 
 ## 📜 License
 
-By contributing to Dashly, you agree that your contributions will be licensed under the MIT License.
+By contributing to SoroOne, you agree that your contributions will be licensed under the MIT License.
 
 ---
 
-Thank you for helping make Dashly better! 🎉
+Thank you for helping make SoroOne better! 🎉
