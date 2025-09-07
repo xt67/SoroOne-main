@@ -176,12 +176,6 @@ export default function DashboardScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-      <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
-        <Text style={[styles.pageTitle, { color: theme.colors.textPrimary }]}>
-          Home
-        </Text>
-      </View>
-
       <View style={styles.statsContainer}>
         <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
           <Ionicons name="document-text-outline" size={24} color="#2563EB" />
