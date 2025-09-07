@@ -79,6 +79,7 @@ export const darkTheme = {
     success: '#34D399',
     info: '#60A5FA',
     accent: '#FFFFFF',
+    gradient: ['#FFFFFF', '#A0A0A0'],
     chart: ['#FFFFFF', '#34D399', '#FBBF24', '#F87171', '#A78BFA', '#22D3EE'],
   },
   spacing: lightTheme.spacing,

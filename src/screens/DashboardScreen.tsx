@@ -348,6 +348,7 @@ export default function DashboardScreen() {
 
       {showDashboardViewer && selectedDashboard && (
         <DashboardViewer
+          visible={showDashboardViewer}
           dashboard={selectedDashboard}
           onClose={() => setShowDashboardViewer(false)}
         />
