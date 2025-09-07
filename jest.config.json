@@ -1,0 +1,22 @@
+{
+  "preset": "jest-expo",
+  "testEnvironment": "jsdom",
+  "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
+  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"],
+  "transform": {
+    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+  },
+  "testMatch": [
+    "**/__tests__/**/*.(ts|tsx|js|jsx)",
+    "**/*.(test|spec).(ts|tsx|js|jsx)"
+  ],
+  "collectCoverageFrom": [
+    "src/**/*.{ts,tsx,js,jsx}",
+    "!src/**/*.d.ts",
+    "!src/types/**/*",
+    "!**/node_modules/**"
+  ],
+  "coverageReporters": ["text", "lcov", "html"],
+  "coverageDirectory": "coverage",
+  "verbose": true
+}
