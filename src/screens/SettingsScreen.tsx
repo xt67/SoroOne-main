@@ -303,7 +303,7 @@ Thank you for creating this amazing app!`);
               <View style={styles.settingText}>
                 <Text style={[styles.settingTitle, { color: theme.colors.textPrimary }]}>Rate App</Text>
                 <Text style={[styles.settingDescription, { color: theme.colors.textSecondary }]}>
-                  Rate and review SoroOne
+                                    Rate and review SoroOne
                 </Text>
               </View>
             </View>
