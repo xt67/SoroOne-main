@@ -97,7 +97,7 @@ export default function AppNavigator() {
             component={DataInputScreen}
             options={{
               tabBarLabel: 'Data Input',
-              headerTitle: 'Import Data',
+              headerShown: false,
             }}
           />
           <Tab.Screen

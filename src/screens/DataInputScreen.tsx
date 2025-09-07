@@ -12,7 +12,6 @@ import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import type { ImportedDataset, NavigationParamList } from '../types';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import CSVTestComponent from '../components/CSVTestComponent';
 
 type DataInputNavigationProp = BottomTabNavigationProp<NavigationParamList, 'DataInput'>;
 
@@ -129,22 +128,6 @@ export default function DataInputScreen() {
         return ['text/sql', 'application/sql', 'text/x-sql', 'text/plain'];
       default:
         return ['*/*'];
-    }
-  };
-
-  const testCSVProcessing = async () => {
-    try {
-      console.log('Testing CSV processing...');
-      const testData = dataProcessor.testCSVProcessing();
-      console.log('Test CSV data:', testData);
-      
-      Alert.alert(
-        'CSV Test Success',
-        `Test CSV processed successfully!\nRows: ${testData.metadata.rowCount}\nColumns: ${testData.metadata.columnCount}`
-      );
-    } catch (error) {
-      console.error('CSV test error:', error);
-      Alert.alert('CSV Test Error', (error as Error).message);
     }
   };
 
@@ -377,16 +360,6 @@ export default function DataInputScreen() {
       )}
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={[styles.title, { color: theme.colors.textPrimary }]}>
-            Import Your Data
-          </Text>
-          <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
-            Transform your data into powerful insights
-          </Text>
-        </View>
-
         {/* Quick Actions */}
         <View style={styles.quickActions}>
           <TouchableOpacity 
@@ -397,17 +370,6 @@ export default function DataInputScreen() {
             <View style={styles.quickActionContent}>
               <Ionicons name="flash" size={24} color="#FFFFFF" />
               <Text style={styles.quickActionText}>Quick Import</Text>
-            </View>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.quickAction, { backgroundColor: theme.colors.secondary }]}
-            onPress={testCSVProcessing}
-            disabled={isLoading}
-          >
-            <View style={styles.quickActionContent}>
-              <Ionicons name="play-circle" size={24} color="#FFFFFF" />
-              <Text style={styles.quickActionText}>Try Demo</Text>
             </View>
           </TouchableOpacity>
         </View>
