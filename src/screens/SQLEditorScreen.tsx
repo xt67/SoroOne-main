@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { Card } from '../components/Card';
+import { Button } from '../components/Button';
+import { useTheme } from '../styles/ThemeProvider';
 
 export default function SQLEditorScreen() {
+  const { theme } = useTheme();
   const [query, setQuery] = useState('SELECT * FROM table_name LIMIT 10;');
   const [isExecuting, setIsExecuting] = useState(false);
 
@@ -16,71 +20,83 @@ export default function SQLEditorScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.toolbar}>
-        <TouchableOpacity style={styles.toolbarButton} onPress={executeQuery}>
-          <Ionicons 
-            name={isExecuting ? "hourglass-outline" : "play-outline"} 
-            size={20} 
-            color="#FFFFFF" 
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
+      <View style={styles.content}>
+        {/* Toolbar */}
+        <Card style={styles.toolbarCard}>
+          <View style={styles.toolbar}>
+            <Button
+              title={isExecuting ? 'Executing...' : 'Run Query'}
+              onPress={executeQuery}
+              style={styles.runButton}
+              disabled={isExecuting}
+            />
+            
+            <View style={styles.toolbarActions}>
+              <TouchableOpacity style={[styles.toolbarButton, { backgroundColor: theme.colors.surface }]}>
+                <Ionicons name="save-outline" size={20} color={theme.colors.primary} />
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={[styles.toolbarButton, { backgroundColor: theme.colors.surface }]}>
+                <Ionicons name="folder-outline" size={20} color={theme.colors.primary} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Card>
+
+        {/* Editor */}
+        <Card style={styles.editorCard}>
+          <View style={styles.editorHeader}>
+            <Text style={[styles.editorLabel, { color: theme.colors.textPrimary }]}>SQL Query Editor</Text>
+          </View>
+          <TextInput
+            style={[styles.editor, { 
+              backgroundColor: theme.colors.background,
+              color: theme.colors.textPrimary,
+              borderColor: theme.colors.border
+            }]}
+            value={query}
+            onChangeText={setQuery}
+            multiline
+            placeholder="Enter your SQL query here..."
+            placeholderTextColor={theme.colors.textSecondary}
+            textAlignVertical="top"
           />
-          <Text style={styles.toolbarButtonText}>
-            {isExecuting ? 'Executing...' : 'Run Query'}
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={[styles.toolbarButton, styles.secondaryButton]}>
-          <Ionicons name="save-outline" size={20} color="#2563EB" />
-          <Text style={[styles.toolbarButtonText, styles.secondaryButtonText]}>Save</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={[styles.toolbarButton, styles.secondaryButton]}>
-          <Ionicons name="folder-outline" size={20} color="#2563EB" />
-          <Text style={[styles.toolbarButtonText, styles.secondaryButtonText]}>Open</Text>
-        </TouchableOpacity>
-      </View>
+        </Card>
 
-      <View style={styles.editorContainer}>
-        <Text style={styles.editorLabel}>SQL Query Editor</Text>
-        <TextInput
-          style={styles.editor}
-          value={query}
-          onChangeText={setQuery}
-          multiline
-          placeholder="Enter your SQL query here..."
-          placeholderTextColor="#9CA3AF"
-          textAlignVertical="top"
-        />
-      </View>
+        {/* Results */}
+        <Card style={styles.resultsCard}>
+          <View style={styles.resultsHeader}>
+            <Text style={[styles.resultsTitle, { color: theme.colors.textPrimary }]}>Query Results</Text>
+            <Text style={[styles.resultsInfo, { color: theme.colors.textSecondary }]}>0 rows returned</Text>
+          </View>
+          
+          <View style={styles.emptyResults}>
+            <Ionicons name="information-circle-outline" size={48} color={theme.colors.textSecondary} />
+            <Text style={[styles.emptyText, { color: theme.colors.textPrimary }]}>No results to display</Text>
+            <Text style={[styles.emptySubtext, { color: theme.colors.textSecondary }]}>
+              Run a query to see results here
+            </Text>
+          </View>
+        </Card>
 
-      <View style={styles.resultsContainer}>
-        <View style={styles.resultsHeader}>
-          <Text style={styles.resultsTitle}>Query Results</Text>
-          <Text style={styles.resultsInfo}>0 rows returned</Text>
-        </View>
-        
-        <View style={styles.emptyResults}>
-          <Ionicons name="information-circle-outline" size={48} color="#9CA3AF" />
-          <Text style={styles.emptyText}>No results to display</Text>
-          <Text style={styles.emptySubtext}>
-            Run a query to see results here
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.savedQueries}>
-        <Text style={styles.sectionTitle}>Saved Queries</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity style={styles.queryChip}>
-            <Text style={styles.chipText}>Sample Query 1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.queryChip}>
-            <Text style={styles.chipText}>User Analytics</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.queryChip}>
-            <Text style={styles.chipText}>Sales Report</Text>
-          </TouchableOpacity>
-        </ScrollView>
+        {/* Saved Queries */}
+        <Card style={styles.savedQueriesCard}>
+          <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Saved Queries</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.queriesScroll}>
+            <View style={styles.queryChipsContainer}>
+              <TouchableOpacity style={[styles.queryChip, { backgroundColor: theme.colors.surface }]}>
+                <Text style={[styles.chipText, { color: theme.colors.textPrimary }]}>Sample Query 1</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.queryChip, { backgroundColor: theme.colors.surface }]}>
+                <Text style={[styles.chipText, { color: theme.colors.textPrimary }]}>User Analytics</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.queryChip, { backgroundColor: theme.colors.surface }]}>
+                <Text style={[styles.chipText, { color: theme.colors.textPrimary }]}>Sales Report</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </Card>
       </View>
     </SafeAreaView>
   );
@@ -89,84 +105,76 @@ export default function SQLEditorScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+    gap: 16,
+  },
+  toolbarCard: {
+    marginBottom: 0,
   },
   toolbar: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    gap: 12,
+  },
+  runButton: {
+    flex: 1,
+    marginRight: 12,
+  },
+  toolbarActions: {
+    flexDirection: 'row',
+    gap: 8,
   },
   toolbarButton: {
-    flexDirection: 'row',
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2563EB',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 6,
-    gap: 6,
   },
-  secondaryButton: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#2563EB',
+  editorCard: {
+    flex: 2,
+    marginBottom: 0,
   },
-  toolbarButtonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  secondaryButtonText: {
-    color: '#2563EB',
-  },
-  editorContainer: {
-    flex: 1,
+  editorHeader: {
     padding: 16,
+    paddingBottom: 8,
   },
   editorLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 8,
   },
   editor: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    margin: 16,
+    marginTop: 0,
     borderRadius: 8,
     padding: 16,
     fontSize: 14,
     fontFamily: 'monospace',
-    textAlignVertical: 'top',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    minHeight: 200,
   },
-  resultsContainer: {
-    flex: 1,
-    margin: 16,
-    marginTop: 0,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
+  resultsCard: {
+    flex: 2,
+    marginBottom: 0,
   },
   resultsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    paddingBottom: 8,
   },
   resultsTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
   },
   resultsInfo: {
     fontSize: 14,
-    color: '#6B7280',
   },
   emptyResults: {
     flex: 1,
@@ -177,36 +185,36 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1F2937',
     marginTop: 16,
     marginBottom: 8,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#6B7280',
     textAlign: 'center',
   },
-  savedQueries: {
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+  savedQueriesCard: {
+    marginBottom: 0,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 12,
+    padding: 16,
+    paddingBottom: 8,
+  },
+  queriesScroll: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+  },
+  queryChipsContainer: {
+    flexDirection: 'row',
+    gap: 8,
   },
   queryChip: {
-    backgroundColor: '#EFF6FF',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    marginRight: 8,
   },
   chipText: {
-    color: '#2563EB',
     fontSize: 14,
     fontWeight: '500',
   },
