@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Linking, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../styles/ThemeProvider';
 import { ColorSchemeModal } from '../components/ColorSchemeModal';
@@ -201,8 +202,8 @@ Thank you for creating this amazing app!`);
   };
 
   return (
-    <>
-      <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
+      <ScrollView style={{ flex: 1 }}>
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Appearance</Text>
           
@@ -303,7 +304,7 @@ Thank you for creating this amazing app!`);
               <View style={styles.settingText}>
                 <Text style={[styles.settingTitle, { color: theme.colors.textPrimary }]}>Rate App</Text>
                 <Text style={[styles.settingDescription, { color: theme.colors.textSecondary }]}>
-                  Rate and review SoroOne
+                                    Rate and review SoroOne
                 </Text>
               </View>
             </View>
@@ -334,7 +335,7 @@ Thank you for creating this amazing app!`);
         visible={showAboutModal}
         onClose={closeAboutModal}
       />
-    </>
+    </SafeAreaView>
   );
 }
 
@@ -344,17 +345,12 @@ const styles = StyleSheet.create({
   },
   section: {
     marginTop: 20,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#E5E7EB',
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     paddingHorizontal: 20,
     paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
   },
   settingItem: {
     flexDirection: 'row',
@@ -362,8 +358,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
   },
   settingLeft: {
     flexDirection: 'row',

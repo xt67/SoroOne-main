@@ -1,6 +1,6 @@
 ---
 name: ✨ Feature Request
-about: Suggest an idea for Dashly
+about: Suggest an idea for SoroOne
 title: '[FEATURE] '
 labels: ['enhancement', 'needs-triage']
 assignees: ''

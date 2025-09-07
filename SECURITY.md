@@ -2,7 +2,7 @@
 
 ## 🔒 Supported Versions
 
-We actively support the following versions of Dashly with security updates:
+We actively support the following versions of SoroOne with security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -19,7 +19,7 @@ We take security seriously and appreciate responsible disclosure of security vul
 **For security issues, please do NOT open a public GitHub issue.**
 
 Instead, please report security vulnerabilities by emailing:
-- **Email**: security@dashly.app
+- **Email**: security@soroone.app
 - **Subject**: [SECURITY] Brief description of the issue
 
 ### 📋 What to Include
@@ -52,7 +52,7 @@ When reporting a security vulnerability, please include:
 
 ### For Users
 
-- **Keep Updated**: Always use the latest version of Dashly
+- **Keep Updated**: Always use the latest version of SoroOne
 - **Secure Device**: Keep your device OS updated
 - **Data Privacy**: Be cautious with sensitive data uploads
 - **App Permissions**: Review and understand app permissions
@@ -86,7 +86,7 @@ When reporting a security vulnerability, please include:
 
 ## 🏆 Security Hall of Fame
 
-We recognize security researchers who help make Dashly more secure:
+We recognize security researchers who help make SoroOne more secure:
 
 *Currently empty - be the first contributor!*
 
@@ -105,10 +105,10 @@ We recognize security researchers who help make Dashly more secure:
 ## 📞 Contact
 
 For any security-related questions or concerns:
-- **Security Email**: security@dashly.app
-- **General Contact**: support@dashly.app
-- **Website**: https://dashly.app/security
+- **Security Email**: security@soroone.app
+- **General Contact**: support@soroone.app
+- **Website**: https://soroone.app/security
 
 ---
 
-**Thank you for helping keep Dashly and our users secure! 🙏**
+**Thank you for helping keep SoroOne and our users secure! 🙏**

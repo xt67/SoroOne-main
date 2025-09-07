@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { DashboardViewer } from '../components/DashboardViewer';
+import { Card } from '../components/Card';
+import { Button } from '../components/Button';
 import { dataService } from '../services/DataService';
 import { useTheme } from '../styles/ThemeProvider';
 import type { Dataset, DataSource, Dashboard, NavigationParamList } from '../types';
@@ -39,15 +42,6 @@ export default function DashboardScreen() {
         datasets: datasetList.length, 
         dashboards: dashboardList.length 
       });
-      
-      // Debug: Log dashboard details
-      if (dashboardList.length > 0) {
-        console.log('DashboardScreen: Dashboard details:', dashboardList.map(d => ({
-          id: d.id,
-          name: d.name,
-          chartsCount: d.charts.length
-        })));
-      }
     } catch (error) {
       console.error('DashboardScreen: Failed to load dashboard data:', error);
     }
@@ -84,9 +78,9 @@ export default function DashboardScreen() {
             id: 'chart_1',
             type: 'bar',
             title: 'Data Overview',
-            datasetId: dataSources[0].id, // Use the first data source as dataset reference
-            xColumn: 'Column1', // Placeholder - would be dynamic based on actual data
-            yColumn: 'Column2', // Placeholder - would be dynamic based on actual data
+            datasetId: dataSources[0].id,
+            xColumn: 'Column1',
+            yColumn: 'Column2',
             styling: {
               colors: ['#2563EB', '#10B981', '#F59E0B'],
               theme: 'light',
@@ -118,23 +112,6 @@ export default function DashboardScreen() {
     setShowDashboardViewer(true);
   };
 
-  const showDashboardCharts = (dashboard: Dashboard) => {
-    if (dashboard.charts.length === 0) {
-      Alert.alert('No Charts', 'This dashboard has no charts yet.');
-      return;
-    }
-
-    const chartList = dashboard.charts.map((chart, index) => 
-      `${index + 1}. ${chart.title} (${chart.type} chart)`
-    ).join('\n');
-
-    Alert.alert(
-      `Charts in ${dashboard.name}`,
-      chartList,
-      [{ text: 'OK' }]
-    );
-  };
-
   const editDashboard = (dashboard: Dashboard) => {
     Alert.alert(
       'Edit Dashboard',
@@ -151,14 +128,6 @@ export default function DashboardScreen() {
     );
   };
 
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
-
   const formatDate = (date: Date): string => {
     return date.toLocaleDateString('en-US', {
       month: 'short',
@@ -168,386 +137,240 @@ export default function DashboardScreen() {
   };
 
   return (
-    <ScrollView 
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
-      <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
-        <Text style={[styles.pageTitle, { color: theme.colors.textPrimary }]}>
-          Home
-        </Text>
-      </View>
-
-      <View style={styles.statsContainer}>
-        <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
-          <Ionicons name="document-text-outline" size={24} color="#2563EB" />
-          <Text style={[styles.statNumber, { color: theme.colors.textPrimary }]}>
-            {dataSources.length}
-          </Text>
-          <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
-            Data Sources
-          </Text>
-        </View>
-        
-        <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
-          <Ionicons name="bar-chart-outline" size={24} color="#10B981" />
-          <Text style={[styles.statNumber, { color: theme.colors.textPrimary }]}>
-            {dashboards.length}
-          </Text>
-          <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
-            Dashboards
-          </Text>
-        </View>
-        
-        <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
-          <Ionicons name="bulb-outline" size={24} color="#F59E0B" />
-          <Text style={[styles.statNumber, { color: theme.colors.textPrimary }]}>
-            {datasets.length}
-          </Text>
-          <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
-            Datasets
-          </Text>
-        </View>
-      </View>
-
-      {/* Recent Uploaded Data Section */}
-      <View style={styles.recentDataSection}>
-        <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>
-          Recent Uploaded Data
-        </Text>
-        {dataSources.length > 0 ? (
-          dataSources.slice(0, 5).map((source) => (
-            <View key={source.id} style={[styles.dataSourceCard, { backgroundColor: theme.colors.surface }]}>
-              <View style={styles.dataSourceHeader}>
-                <Ionicons 
-                  name={source.type === 'csv' ? 'document-text' : source.type === 'excel' ? 'document' : 'server'} 
-                  size={20} 
-                  color="#2563EB" 
-                />
-                <View style={styles.dataSourceInfo}>
-                  <Text style={[styles.dataSourceName, { color: theme.colors.textPrimary }]}>
-                    {source.name}
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
+      <ScrollView 
+        style={{ flex: 1 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <View style={styles.content}>
+          {/* Quick Stats */}
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Overview</Text>
+            <View style={styles.statsGrid}>
+              <Card style={styles.statCard}>
+                <View style={styles.statContent}>
+                  <View style={[styles.statIconContainer, { backgroundColor: '#FFFFFF20' }]}>
+                    <Ionicons name="document-text-outline" size={24} color={theme.colors.primary} />
+                  </View>
+                  <Text style={[styles.statNumber, { color: theme.colors.textPrimary }]}>
+                    {dataSources.length}
                   </Text>
-                  <Text style={[styles.dataSourceDetails, { color: theme.colors.textSecondary }]}>
-                    {source.rowCount.toLocaleString()} rows • {source.columnCount} columns • {formatFileSize(source.size)}
+                  <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
+                    Data Sources
                   </Text>
                 </View>
-              </View>
-              <Text style={[styles.dataSourceDate, { color: theme.colors.textSecondary }]}>
-                {formatDate(source.createdAt)}
-              </Text>
+              </Card>
+              
+              <Card style={styles.statCard}>
+                <View style={styles.statContent}>
+                  <View style={[styles.statIconContainer, { backgroundColor: '#10B98120' }]}>
+                    <Ionicons name="bar-chart-outline" size={24} color="#10B981" />
+                  </View>
+                  <Text style={[styles.statNumber, { color: theme.colors.textPrimary }]}>
+                    {dashboards.length}
+                  </Text>
+                  <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
+                    Dashboards
+                  </Text>
+                </View>
+              </Card>
             </View>
-          ))
-        ) : (
-          <View style={[styles.emptyState, { backgroundColor: theme.colors.surface }]}>
-            <Ionicons name="folder-open-outline" size={48} color={theme.colors.textSecondary} />
-            <Text style={[styles.emptyStateText, { color: theme.colors.textSecondary }]}>
-              No data uploaded yet
-            </Text>
-            <Text style={[styles.emptyStateSubtext, { color: theme.colors.textSecondary }]}>
-              Start by importing your first dataset
-            </Text>
           </View>
-        )}
-      </View>
 
-      {/* Dashboards Section */}
-      <View style={styles.dashboardsSection}>
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>
-            My Dashboards
-          </Text>
+          {/* Recent Data Sources */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Recent Data</Text>
+              {dataSources.length > 3 && (
+                <TouchableOpacity onPress={navigateToDataInput}>
+                  <Text style={[styles.seeAllText, { color: theme.colors.primary }]}>See All</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            
+            {dataSources.length > 0 ? (
+              <View style={styles.dataSourcesList}>
+                {dataSources.slice(0, 3).map((source) => (
+                  <Card key={source.id} style={styles.dataSourceCard}>
+                    <View style={styles.dataSourceItem}>
+                      <View style={styles.dataSourceIcon}>
+                        <Ionicons 
+                          name={source.type === 'csv' ? 'document-text' : source.type === 'excel' ? 'document' : 'server'} 
+                          size={20} 
+                          color={theme.colors.primary}
+                        />
+                      </View>
+                      <View style={styles.dataSourceInfo}>
+                        <Text style={[styles.dataSourceName, { color: theme.colors.textPrimary }]}>
+                          {source.name}
+                        </Text>
+                        <Text style={[styles.dataSourceMeta, { color: theme.colors.textSecondary }]}>
+                          {source.rowCount.toLocaleString()} rows • {source.columnCount} cols
+                        </Text>
+                        <Text style={[styles.dataSourceDate, { color: theme.colors.textSecondary }]}>
+                          {formatDate(source.createdAt)}
+                        </Text>
+                      </View>
+                    </View>
+                  </Card>
+                ))}
+              </View>
+            ) : (
+              <Card style={styles.emptyCard}>
+                <View style={styles.emptyState}>
+                  <Ionicons name="folder-open-outline" size={48} color={theme.colors.textSecondary} />
+                  <Text style={[styles.emptyTitle, { color: theme.colors.textPrimary }]}>No Data Yet</Text>
+                  <Text style={[styles.emptyDescription, { color: theme.colors.textSecondary }]}>
+                    Import your first dataset to get started with creating dashboards and insights
+                  </Text>
+                  <Button
+                    title="Import Data"
+                    onPress={navigateToDataInput}
+                    style={styles.emptyActionButton}
+                  />
+                </View>
+              </Card>
+            )}
+          </View>
+
+          {/* Dashboards */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Dashboards</Text>
+              {dataSources.length > 0 && (
+                <Button
+                  title="Create"
+                  onPress={createSampleDashboard}
+                  style={styles.createButton}
+                  size="small"
+                />
+              )}
+            </View>
+            
+            {dashboards.length > 0 ? (
+              <View style={styles.dashboardsList}>
+                {dashboards.map((dashboard) => (
+                  <Card key={dashboard.id} style={styles.dashboardCard}>
+                    <TouchableOpacity style={styles.dashboardItem} onPress={() => viewDashboard(dashboard)}>
+                      <View style={styles.dashboardIcon}>
+                        <Ionicons name="grid-outline" size={20} color={theme.colors.primary} />
+                      </View>
+                      <View style={styles.dashboardInfo}>
+                        <Text style={[styles.dashboardName, { color: theme.colors.textPrimary }]}>
+                          {dashboard.name}
+                        </Text>
+                        <Text style={[styles.dashboardMeta, { color: theme.colors.textSecondary }]}>
+                          {dashboard.charts.length} charts • {formatDate(dashboard.updatedAt)}
+                        </Text>
+                        {dashboard.description && (
+                          <Text style={[styles.dashboardDescription, { color: theme.colors.textSecondary }]}>
+                            {dashboard.description}
+                          </Text>
+                        )}
+                      </View>
+                      <View style={styles.dashboardActions}>
+                        <TouchableOpacity 
+                          style={styles.actionButton} 
+                          onPress={(e) => {
+                            e.stopPropagation();
+                            editDashboard(dashboard);
+                          }}
+                        >
+                          <Ionicons name="create-outline" size={18} color={theme.colors.textSecondary} />
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                          style={styles.actionButton} 
+                          onPress={(e) => {
+                            e.stopPropagation();
+                            shareDashboard(dashboard);
+                          }}
+                        >
+                          <Ionicons name="share-outline" size={18} color={theme.colors.textSecondary} />
+                        </TouchableOpacity>
+                      </View>
+                    </TouchableOpacity>
+                  </Card>
+                ))}
+              </View>
+            ) : dataSources.length > 0 ? (
+              <Card style={styles.emptyCard}>
+                <View style={styles.emptyState}>
+                  <Ionicons name="grid-outline" size={48} color={theme.colors.textSecondary} />
+                  <Text style={[styles.emptyTitle, { color: theme.colors.textPrimary }]}>No Dashboards</Text>
+                  <Text style={[styles.emptyDescription, { color: theme.colors.textSecondary }]}>
+                    Create your first dashboard to visualize your data
+                  </Text>
+                  <Button
+                    title="Create Dashboard"
+                    onPress={createSampleDashboard}
+                    style={styles.emptyActionButton}
+                  />
+                </View>
+              </Card>
+            ) : null}
+          </View>
+
+          {/* Quick Actions */}
           {dataSources.length > 0 && (
-            <TouchableOpacity 
-              style={[styles.createButton, { backgroundColor: theme.colors.primary }]}
-              onPress={createSampleDashboard}
-            >
-              <Ionicons name="add" size={20} color="white" />
-              <Text style={styles.createButtonText}>Create</Text>
-            </TouchableOpacity>
+            <View style={styles.section}>
+              <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Quick Actions</Text>
+              <View style={styles.actionsGrid}>
+                <Card style={styles.actionCard}>
+                  <TouchableOpacity style={styles.actionContent} onPress={navigateToAIInsights}>
+                    <View style={[styles.actionIconContainer, { backgroundColor: '#8B5CF620' }]}>
+                      <Ionicons name="bulb-outline" size={24} color="#8B5CF6" />
+                    </View>
+                    <Text style={[styles.actionTitle, { color: theme.colors.textPrimary }]}>AI Insights</Text>
+                    <Text style={[styles.actionDescription, { color: theme.colors.textSecondary }]}>
+                      Get smart analysis
+                    </Text>
+                  </TouchableOpacity>
+                </Card>
+                
+                <Card style={styles.actionCard}>
+                  <TouchableOpacity style={styles.actionContent} onPress={navigateToDataInput}>
+                    <View style={[styles.actionIconContainer, { backgroundColor: '#F59E0B20' }]}>
+                      <Ionicons name="cloud-upload-outline" size={24} color="#F59E0B" />
+                    </View>
+                    <Text style={[styles.actionTitle, { color: theme.colors.textPrimary }]}>Import More</Text>
+                    <Text style={[styles.actionDescription, { color: theme.colors.textSecondary }]}>
+                      Add more datasets
+                    </Text>
+                  </TouchableOpacity>
+                </Card>
+              </View>
+            </View>
           )}
         </View>
-        
-        {dashboards.length > 0 ? (
-          dashboards.map((dashboard) => (
-            <View key={dashboard.id} style={[styles.dashboardCard, { backgroundColor: theme.colors.surface }]}>
-              <View style={styles.dashboardHeader}>
-                <Ionicons name="grid-outline" size={24} color="#8B5CF6" />
-                <View style={styles.dashboardInfo}>
-                  <Text style={[styles.dashboardName, { color: theme.colors.textPrimary }]}>
-                    {dashboard.name}
-                  </Text>
-                  {dashboard.description && (
-                    <Text style={[styles.dashboardDescription, { color: theme.colors.textSecondary }]}>
-                      {dashboard.description}
-                    </Text>
-                  )}
-                  <Text style={[styles.dashboardDetails, { color: theme.colors.textSecondary }]}>
-                    {dashboard.charts.length} charts • {dashboard.isShared ? 'Shared' : 'Private'}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.dashboardActions}>
-                <TouchableOpacity style={styles.actionButton} onPress={() => viewDashboard(dashboard)}>
-                  <Ionicons name="eye-outline" size={20} color="#2563EB" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton} onPress={() => editDashboard(dashboard)}>
-                  <Ionicons name="create-outline" size={20} color="#10B981" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton} onPress={() => shareDashboard(dashboard)}>
-                  <Ionicons name="share-outline" size={20} color="#F59E0B" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))
-        ) : (
-          <View style={[styles.emptyState, { backgroundColor: theme.colors.surface }]}>
-            <Ionicons name="grid-outline" size={48} color={theme.colors.textSecondary} />
-            <Text style={[styles.emptyStateText, { color: theme.colors.textSecondary }]}>
-              No dashboards created yet
-            </Text>
-            <Text style={[styles.emptyStateSubtext, { color: theme.colors.textSecondary }]}>
-              Create your first dashboard from uploaded data
-            </Text>
-            {dataSources.length > 0 && (
-              <TouchableOpacity 
-                style={[styles.emptyActionButton, { backgroundColor: theme.colors.primary }]}
-                onPress={createSampleDashboard}
-              >
-                <Text style={styles.emptyActionButtonText}>Create Dashboard</Text>
-              </TouchableOpacity>
-            )}
-            
-            {/* Debug: Create test dashboard button */}
-            <TouchableOpacity 
-              style={[styles.emptyActionButton, { backgroundColor: '#8B5CF6', marginTop: 12 }]}
-              onPress={() => {
-                const testDashboard: Dashboard = {
-                  id: `test_dashboard_${Date.now()}`,
-                  name: 'Test Dashboard',
-                  description: 'This is a test dashboard for debugging',
-                  charts: [
-                    {
-                      id: 'test_chart_1',
-                      type: 'bar',
-                      title: 'Sample Chart',
-                      datasetId: 'test_dataset',
-                      xColumn: 'Category',
-                      yColumn: 'Value',
-                      styling: {
-                        colors: ['#2563EB', '#10B981', '#F59E0B'],
-                        theme: 'light',
-                        showLegend: true,
-                        showGrid: true
-                      }
-                    }
-                  ],
-                  layout: [{ chartId: 'test_chart_1', x: 0, y: 0, width: 2, height: 1 }],
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  isShared: false,
-                  theme: 'auto'
-                };
-                setSelectedDashboard(testDashboard);
-                setShowDashboardViewer(true);
-              }}
-            >
-              <Text style={styles.emptyActionButtonText}>Test Dashboard Viewer</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
+      </ScrollView>
 
-      <View style={styles.actionsContainer}>
-        <TouchableOpacity 
-          style={[styles.actionCard, { backgroundColor: theme.colors.surface }]}
-          onPress={navigateToDataInput}
-        >
-          <Ionicons name="cloud-upload-outline" size={32} color="#2563EB" />
-          <Text style={[styles.actionTitle, { color: theme.colors.textPrimary }]}>
-            Import Data
-          </Text>
-          <Text style={[styles.actionDescription, { color: theme.colors.textSecondary }]}>
-            Upload Excel, CSV, or SQL files to get started
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={[styles.actionCard, { backgroundColor: theme.colors.surface }]}
-          onPress={navigateToAIInsights}
-        >
-          <Ionicons name="analytics-outline" size={32} color="#8B5CF6" />
-          <Text style={[styles.actionTitle, { color: theme.colors.textPrimary }]}>
-            AI Insights
-          </Text>
-          <Text style={[styles.actionDescription, { color: theme.colors.textSecondary }]}>
-            Get intelligent recommendations for your data
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Dashboard Viewer Modal */}
-      <DashboardViewer
-        visible={showDashboardViewer}
-        dashboard={selectedDashboard}
-        onClose={() => {
-          setShowDashboardViewer(false);
-          setSelectedDashboard(null);
-        }}
-      />
-    </ScrollView>
+      {showDashboardViewer && selectedDashboard && (
+        <DashboardViewer
+          visible={showDashboardViewer}
+          dashboard={selectedDashboard}
+          onClose={() => setShowDashboardViewer(false)}
+        />
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
   },
-  header: {
+  content: {
     padding: 20,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    alignItems: 'center',
   },
-  pageTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-  },
-  subtitleText: {
-    fontSize: 16,
-    color: '#6B7280',
-    marginTop: 8,
-    textAlign: 'center',
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 20,
-    gap: 12,
-  },
-  statCard: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  statNumber: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#1F2937',
-    marginTop: 8,
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginTop: 4,
-  },
-  recentDataSection: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
+  section: {
+    marginBottom: 24,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
     marginBottom: 16,
-  },
-  dataSourceCard: {
-    backgroundColor: '#FFFFFF',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  dataSourceHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  dataSourceInfo: {
-    marginLeft: 12,
-    flex: 1,
-  },
-  dataSourceName: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  dataSourceDetails: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
-  dataSourceDate: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
-  emptyState: {
-    backgroundColor: '#FFFFFF',
-    padding: 40,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  emptyStateText: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptyStateSubtext: {
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  actionsContainer: {
-    padding: 20,
-    gap: 16,
-  },
-  actionCard: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  actionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1F2937',
-    marginTop: 12,
-    marginBottom: 8,
-  },
-  actionDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  dashboardsSection: {
-    padding: 20,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -555,58 +378,107 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  createButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    gap: 4,
-  },
-  createButtonText: {
-    color: 'white',
+  seeAllText: {
     fontSize: 14,
     fontWeight: '600',
   },
-  dashboardCard: {
+  statsGrid: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    marginBottom: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    gap: 16,
   },
-  dashboardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  statCard: {
     flex: 1,
   },
+  statContent: {
+    alignItems: 'center',
+    padding: 16,
+  },
+  statIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  statNumber: {
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  dataSourcesList: {
+    gap: 12,
+  },
+  dataSourceCard: {
+    marginBottom: 0,
+  },
+  dataSourceItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+  },
+  dataSourceIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  dataSourceInfo: {
+    flex: 1,
+  },
+  dataSourceName: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  dataSourceMeta: {
+    fontSize: 14,
+    marginBottom: 2,
+  },
+  dataSourceDate: {
+    fontSize: 12,
+  },
+  dashboardsList: {
+    gap: 12,
+  },
+  dashboardCard: {
+    marginBottom: 0,
+  },
+  dashboardItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+  },
+  dashboardIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
   dashboardInfo: {
-    marginLeft: 12,
     flex: 1,
   },
   dashboardName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 4,
+    marginBottom: 2,
+  },
+  dashboardMeta: {
+    fontSize: 14,
+    marginBottom: 2,
   },
   dashboardDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 4,
-  },
-  dashboardDetails: {
     fontSize: 12,
-    color: '#9CA3AF',
   },
   dashboardActions: {
     flexDirection: 'row',
@@ -617,16 +489,58 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: '#F3F4F6',
   },
-  emptyActionButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginTop: 16,
+  actionsGrid: {
+    flexDirection: 'row',
+    gap: 16,
   },
-  emptyActionButtonText: {
-    color: 'white',
+  actionCard: {
+    flex: 1,
+  },
+  actionContent: {
+    alignItems: 'center',
+    padding: 16,
+  },
+  actionIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  actionTitle: {
     fontSize: 16,
     fontWeight: '600',
+    marginBottom: 4,
     textAlign: 'center',
+  },
+  actionDescription: {
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  emptyCard: {
+    padding: 0,
+  },
+  emptyState: {
+    alignItems: 'center',
+    padding: 32,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptyDescription: {
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 20,
+  },
+  emptyActionButton: {
+    minWidth: 150,
+  },
+  createButton: {
+    paddingHorizontal: 16,
   },
 });

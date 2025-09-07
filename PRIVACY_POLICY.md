@@ -1,10 +1,10 @@
-# Dashly Privacy Policy
+# SoroOne Privacy Policy
 
 **Last updated: July 14, 2025**
 
 ## Introduction
 
-Dashly ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard information when you use our mobile application.
+SoroOne ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard information when you use our mobile application.
 
 ## Information We Collect
 
@@ -49,8 +49,8 @@ You have the right to:
 ## Contact Us
 
 If you have questions about this Privacy Policy:
-- Email: privacy@dashly.app
-- Website: https://dashly.app/privacy
+- Email: privacy@soroone.app
+- Website: https://soroone.app/privacy
 
 ## Changes to This Policy
 

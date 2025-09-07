@@ -1,6 +1,6 @@
 ---
 name: 🐛 Bug Report
-about: Create a report to help us improve Dashly
+about: Create a report to help us improve SoroOne
 title: '[BUG] '
 labels: ['bug', 'needs-triage']
 assignees: ''
