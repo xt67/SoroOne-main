@@ -111,13 +111,6 @@ export default function AIInsightsScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView style={{ flex: 1 }}>
-        <View style={styles.header}>
-          <Text style={styles.title}>AI-Powered Insights</Text>
-          <Text style={styles.subtitle}>
-            Ask questions about your data in natural language
-          </Text>
-        </View>
-
         <View style={styles.inputContainer}>
         <TextInput
           style={styles.questionInput}

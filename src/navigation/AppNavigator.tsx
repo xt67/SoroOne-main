@@ -105,7 +105,7 @@ export default function AppNavigator() {
             component={SQLEditorScreen}
             options={{
               tabBarLabel: 'SQL Editor',
-              headerTitle: 'SQL Editor',
+              headerShown: false,
             }}
           />
           <Tab.Screen
@@ -113,7 +113,7 @@ export default function AppNavigator() {
             component={AIInsightsScreen}
             options={{
               tabBarLabel: 'AI Insights',
-              headerTitle: 'AI Insights',
+              headerShown: false,
             }}
           />
           <Tab.Screen
@@ -121,7 +121,7 @@ export default function AppNavigator() {
             component={SettingsScreen}
             options={{
               tabBarLabel: 'Settings',
-              headerTitle: 'Settings',
+              headerShown: false,
             }}
           />
         </Tab.Navigator>
