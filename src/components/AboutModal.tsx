@@ -28,7 +28,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ visible, onClose }) => {
     buildNumber: '2025071401',
     releaseDate: 'July 2025',
     platform: 'React Native (Expo)',
-    author: 'Dashly Development Team',
+    author: 'SoroOne Development Team',
   };
 
   const features = [
@@ -63,7 +63,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ visible, onClose }) => {
             <Ionicons name="close" size={24} color={theme.colors.textPrimary} />
           </TouchableOpacity>
           <Text style={[styles.headerTitle, { color: theme.colors.textPrimary }]}>
-            About Dashly
+            About SoroOne
           </Text>
           <View style={styles.placeholder} />
         </View>
@@ -73,7 +73,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ visible, onClose }) => {
           <View style={styles.appInfoSection}>
             <Logo size="large" showText={true} />
             <Text style={[styles.appDescription, { color: theme.colors.textSecondary }]}>
-              Transform your data into actionable insights on the go! Dashly is a comprehensive mobile application 
+              Transform your data into actionable insights on the go! SoroOne is a comprehensive mobile application 
               for data visualization, analysis, and intelligent reporting.
             </Text>
           </View>
@@ -126,29 +126,29 @@ export const AboutModal: React.FC<AboutModalProps> = ({ visible, onClose }) => {
             
             <TouchableOpacity 
               style={styles.linkRow} 
-              onPress={() => openLink('mailto:support@dashly.app')}
+              onPress={() => openLink('mailto:support@soroone.app')}
             >
               <Ionicons name="mail-outline" size={20} color={theme.colors.primary} />
               <Text style={[styles.linkText, { color: theme.colors.primary }]}>
-                support@dashly.app
+                support@soroone.app
               </Text>
               <Ionicons name="open-outline" size={16} color={theme.colors.textSecondary} />
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.linkRow} 
-              onPress={() => openLink('https://dashly.app')}
+              onPress={() => openLink('https://soroone.app')}
             >
               <Ionicons name="globe-outline" size={20} color={theme.colors.primary} />
               <Text style={[styles.linkText, { color: theme.colors.primary }]}>
-                dashly.app
+                soroone.app
               </Text>
               <Ionicons name="open-outline" size={16} color={theme.colors.textSecondary} />
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.linkRow} 
-              onPress={() => openLink('https://github.com/dashly/mobile')}
+              onPress={() => openLink('https://github.com/xt67/SoroOne-main')}
             >
               <Ionicons name="logo-github" size={20} color={theme.colors.primary} />
               <Text style={[styles.linkText, { color: theme.colors.primary }]}>
@@ -209,7 +209,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ visible, onClose }) => {
           {/* Copyright */}
           <View style={styles.copyrightSection}>
             <Text style={[styles.copyrightText, { color: theme.colors.textSecondary }]}>
-              © 2025 Dashly Development Team
+              © 2025 SoroOne Development Team
             </Text>
             <Text style={[styles.copyrightText, { color: theme.colors.textSecondary }]}>
               All rights reserved

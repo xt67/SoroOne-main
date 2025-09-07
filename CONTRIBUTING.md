@@ -1,6 +1,6 @@
-# Contributing to Dashly
+# Contributing to SoroOne
 
-Thank you for your interest in contributing to Dashly! We welcome contributions from developers of all skill levels.
+Thank you for your interest in contributing to SoroOne! We welcome contributions from developers of all skill levels.
 
 ## 🚀 Getting Started
 
@@ -15,12 +15,12 @@ Thank you for your interest in contributing to Dashly! We welcome contributions 
 1. **Fork the repository** on GitHub
 2. **Clone your fork**:
    ```bash
-   git clone https://github.com/YOUR-USERNAME/Dashly-1.0.git
-   cd Dashly-1.0
+   git clone https://github.com/YOUR-USERNAME/SoroOne-main.git
+   cd SoroOne-main
    ```
 3. **Add upstream remote**:
    ```bash
-   git remote add upstream https://github.com/xt67/Dashly-1.0.git
+   git remote add upstream https://github.com/xt67/SoroOne-main.git
    ```
 4. **Install dependencies**:
    ```bash

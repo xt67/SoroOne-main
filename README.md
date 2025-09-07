@@ -1,4 +1,4 @@
-# 📊 Dashly - Data Analytics & Visualization
+# 📊 SoroOne - Data Analytics & Visualization
 
 [![Expo SDK](https://img.shields.io/badge/Expo-SDK%2053-000020.svg?style=flat&logo=expo)](https://expo.dev/)
 [![React Native](https://img.shields.io/badge/React%20Native-0.75-61DAFB.svg?style=flat&logo=react)](https://reactnative.dev/)
@@ -50,8 +50,8 @@ A powerful and intuitive React Native mobile application for data visualization 
 
 1. **Clone the repository**:
 ```bash
-git clone https://github.com/xt67/Dashly-1.0.git
-cd Dashly-1.0
+git clone https://github.com/xt67/SoroOne-main.git
+cd SoroOne-main
 ```
 
 2. **Install dependencies**:
@@ -209,14 +209,14 @@ The app includes 6 professionally designed color schemes:
 We welcome contributions! Please see our [Contributing Guidelines](./CONTRIBUTING.md) for details.
 
 ### 🐛 **Bug Reports**
-Found a bug? Please [open an issue](https://github.com/xt67/Dashly-1.0/issues) with:
+Found a bug? Please [open an issue](https://github.com/xt67/SoroOne-main/issues) with:
 - Clear description of the problem
 - Steps to reproduce
 - Expected vs actual behavior
 - Screenshots if applicable
 
 ### 💡 **Feature Requests**
-Have an idea? We'd love to hear it! [Submit a feature request](https://github.com/xt67/Dashly-1.0/issues) with:
+Have an idea? We'd love to hear it! [Submit a feature request](https://github.com/xt67/SoroOne-main/issues) with:
 - Detailed description of the feature
 - Use case and benefits
 - Any relevant mockups or examples
@@ -234,9 +234,9 @@ This project is licensed under the MIT License - see the [LICENSE.txt](./LICENSE
 
 ## 📞 Support & Contact
 
-- **📧 Email**: support@dashly.app
-- **🐛 Issues**: [GitHub Issues](https://github.com/xt67/Dashly-1.0/issues)
-- **💬 Discussions**: [GitHub Discussions](https://github.com/xt67/Dashly-1.0/discussions)
+- **📧 Email**: support@soroone.app
+- **🐛 Issues**: [GitHub Issues](https://github.com/xt67/SoroOne-main/issues)
+- **💬 Discussions**: [GitHub Discussions](https://github.com/xt67/SoroOne-main/discussions)
 - **📱 App Store**: Coming soon to Google Play Store
 
 ## 🙏 Acknowledgments
@@ -250,10 +250,10 @@ This project is licensed under the MIT License - see the [LICENSE.txt](./LICENSE
 
 <div align="center">
 
-**⭐ If you find Dashly helpful, please give it a star! ⭐**
+**⭐ If you find SoroOne helpful, please give it a star! ⭐**
 
-Made with ❤️ by the Dashly Team
+Made with ❤️ by the SoroOne Team
 
-[Download on Google Play Store](#) | [View Documentation](./docs/) | [Report Issues](https://github.com/xt67/Dashly-1.0/issues)
+[Download on Google Play Store](#) | [View Documentation](./docs/) | [Report Issues](https://github.com/xt67/SoroOne-main/issues)
 
 </div>

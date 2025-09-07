@@ -1,5 +1,5 @@
 /**
- * Theme and styling configuration for Dashly
+ * Theme and styling configuration for SoroOne
  */
 
 export const lightTheme = {
