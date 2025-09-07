@@ -6,6 +6,6 @@ describe('App', () => {
   it('should have proper project structure', () => {
     // Basic project validation
     expect(typeof require('../../package.json').name).toBe('string');
-    expect(require('../../package.json').name).toBe('dashly');
+    expect(require('../../package.json').name).toBe('soroone-main');
   });
 });

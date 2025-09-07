@@ -110,7 +110,7 @@ Go to the main repository page and add these topics:
 
 1. Go to **Settings** → **General**
 2. Upload a social preview image (1280x640px)
-3. Add a description: "📊 Dashly - Modern mobile analytics app for data visualization, AI insights, and SQL editing"
+3. Add a description: "📊 SoroOne - Modern mobile analytics app for data visualization, AI insights, and SQL editing"
 
 ## Step 8: Repository README
 

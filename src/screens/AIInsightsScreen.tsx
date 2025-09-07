@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { Card } from '../components/Card';
+import { Button } from '../components/Button';
 import { useTheme } from '../styles/ThemeProvider';
 
 interface InsightCard {
@@ -108,334 +111,308 @@ export default function AIInsightsScreen() {
   ];
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>AI-Powered Insights</Text>
-        <Text style={styles.subtitle}>
-          Ask questions about your data in natural language
-        </Text>
-      </View>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
+      <ScrollView style={{ flex: 1 }}>
+        <View style={styles.content}>
+          {/* Question Input */}
+          <Card style={styles.inputCard}>
+            <View style={styles.inputContainer}>
+              <Text style={[styles.inputLabel, { color: theme.colors.textPrimary }]}>Ask AI About Your Data</Text>
+              <TextInput
+                style={[styles.questionInput, { 
+                  backgroundColor: theme.colors.background,
+                  color: theme.colors.textPrimary,
+                  borderColor: theme.colors.border
+                }]}
+                value={question}
+                onChangeText={setQuestion}
+                placeholder="What would you like to know about your data?"
+                placeholderTextColor={theme.colors.textSecondary}
+                multiline
+              />
+              <Button
+                title={isGenerating ? 'Analyzing...' : 'Ask AI'}
+                onPress={handleAskQuestion}
+                disabled={isGenerating}
+                style={styles.askButton}
+              />
+            </View>
+          </Card>
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.questionInput}
-          value={question}
-          onChangeText={setQuestion}
-          placeholder="What would you like to know about your data?"
-          placeholderTextColor="#9CA3AF"
-          multiline
-        />
-        <TouchableOpacity 
-          style={[styles.askButton, isGenerating && styles.askButtonDisabled]}
-          onPress={handleAskQuestion}
-          disabled={isGenerating}
-        >
-          <Ionicons 
-            name={isGenerating ? "hourglass-outline" : "send-outline"} 
-            size={20} 
-            color="#FFFFFF" 
-          />
-          <Text style={styles.askButtonText}>
-            {isGenerating ? 'Analyzing...' : 'Ask AI'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.suggestionsContainer}>
-        <Text style={styles.sectionTitle}>Suggested Questions</Text>
-        <View style={styles.suggestionsGrid}>
-          {suggestedQuestions.map((suggestion, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.suggestionCard}
-              onPress={() => setQuestion(suggestion)}
-            >
-              <Text style={styles.suggestionText}>{suggestion}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-
-      <View style={[styles.insightsContainer, { backgroundColor: theme.colors.background }]}>
-        <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>
-          Generated Insights
-        </Text>
-        {isGenerating && (
-          <View style={[styles.loadingCard, { backgroundColor: theme.colors.surface }]}>
-            <ActivityIndicator size="small" color={theme.colors.primary} />
-            <Text style={[styles.loadingText, { color: theme.colors.textSecondary }]}>
-              Generating insights...
-            </Text>
+          {/* Suggested Questions */}
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Suggested Questions</Text>
+            <View style={styles.suggestionsGrid}>
+              {suggestedQuestions.map((suggestion, index) => (
+                <Card key={index} style={styles.suggestionCard}>
+                  <TouchableOpacity
+                    style={styles.suggestionContent}
+                    onPress={() => setQuestion(suggestion)}
+                  >
+                    <Text style={[styles.suggestionText, { color: theme.colors.textPrimary }]}>{suggestion}</Text>
+                  </TouchableOpacity>
+                </Card>
+              ))}
+            </View>
           </View>
-        )}
-        {insights.length === 0 ? (
-          <View style={[styles.emptyState, { backgroundColor: theme.colors.surface }]}>
-            <Ionicons name="bulb-outline" size={64} color={theme.colors.textSecondary} />
-            <Text style={[styles.emptyText, { color: theme.colors.textSecondary }]}>
-              No insights yet
+
+          {/* Generated Insights */}
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>
+              Generated Insights
             </Text>
-            <Text style={[styles.emptySubtext, { color: theme.colors.textSecondary }]}>
-              Start by asking a question about your data
-            </Text>
-          </View>
-        ) : (
-          <View>
-            {insights.map((insight) => (
-              <View 
-                key={insight.id} 
-                style={[styles.insightCard, { backgroundColor: theme.colors.surface }]}
-              >
-                <View style={styles.insightHeader}>
-                  <View style={styles.insightTitleRow}>
-                    <Ionicons 
-                      name={getInsightIcon(insight.type)} 
-                      size={24} 
-                      color={getInsightColor(insight.type)} 
-                    />
-                    <Text style={[styles.insightTitle, { color: theme.colors.textPrimary }]}>
-                      {insight.title}
-                    </Text>
-                  </View>
-                  <View style={styles.confidenceContainer}>
-                    <Text style={[styles.confidenceText, { color: theme.colors.textSecondary }]}>
-                      {insight.confidence}% confidence
-                    </Text>
-                  </View>
+            
+            {isGenerating && (
+              <Card style={styles.loadingCard}>
+                <View style={styles.loadingContent}>
+                  <ActivityIndicator size="small" color={theme.colors.primary} />
+                  <Text style={[styles.loadingText, { color: theme.colors.textSecondary }]}>
+                    Generating insights...
+                  </Text>
                 </View>
-                <Text style={[styles.insightContent, { color: theme.colors.textSecondary }]}>
-                  {insight.content}
-                </Text>
+              </Card>
+            )}
+            
+            {insights.length === 0 && !isGenerating ? (
+              <Card style={styles.emptyCard}>
+                <View style={styles.emptyState}>
+                  <Ionicons name="bulb-outline" size={48} color={theme.colors.textSecondary} />
+                  <Text style={[styles.emptyTitle, { color: theme.colors.textPrimary }]}>
+                    No insights yet
+                  </Text>
+                  <Text style={[styles.emptyDescription, { color: theme.colors.textSecondary }]}>
+                    Start by asking a question about your data or choose from suggested questions above
+                  </Text>
+                </View>
+              </Card>
+            ) : (
+              <View style={styles.insightsList}>
+                {insights.map((insight) => (
+                  <Card key={insight.id} style={styles.insightCard}>
+                    <View style={styles.insightHeader}>
+                      <View style={styles.insightTitleRow}>
+                        <View style={[styles.insightIcon, { backgroundColor: `${getInsightColor(insight.type)}20` }]}>
+                          <Ionicons 
+                            name={getInsightIcon(insight.type)} 
+                            size={20} 
+                            color={getInsightColor(insight.type)} 
+                          />
+                        </View>
+                        <View style={styles.insightTitleContainer}>
+                          <Text style={[styles.insightTitle, { color: theme.colors.textPrimary }]}>
+                            {insight.title}
+                          </Text>
+                          <Text style={[styles.confidenceText, { color: theme.colors.textSecondary }]}>
+                            {insight.confidence}% confidence
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                    <Text style={[styles.insightContent, { color: theme.colors.textSecondary }]}>
+                      {insight.content}
+                    </Text>
+                  </Card>
+                ))}
               </View>
-            ))}
+            )}
           </View>
-        )}
-      </View>
 
-      <View style={styles.featuresContainer}>
-        <Text style={styles.sectionTitle}>AI Features</Text>
-        
-        <View style={styles.featureCard}>
-          <Ionicons name="analytics-outline" size={32} color="#2563EB" />
-          <View style={styles.featureContent}>
-            <Text style={styles.featureTitle}>Data Analysis</Text>
-            <Text style={styles.featureDescription}>
-              Get statistical insights and pattern recognition
-            </Text>
+          {/* AI Features */}
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>AI Features</Text>
+            <View style={styles.featuresGrid}>
+              <Card style={styles.featureCard}>
+                <View style={styles.featureContent}>
+                  <View style={[styles.featureIcon, { backgroundColor: '#2563EB20' }]}>
+                    <Ionicons name="analytics-outline" size={24} color="#2563EB" />
+                  </View>
+                  <Text style={[styles.featureTitle, { color: theme.colors.textPrimary }]}>Data Analysis</Text>
+                  <Text style={[styles.featureDescription, { color: theme.colors.textSecondary }]}>
+                    Statistical insights and patterns
+                  </Text>
+                </View>
+              </Card>
+
+              <Card style={styles.featureCard}>
+                <View style={styles.featureContent}>
+                  <View style={[styles.featureIcon, { backgroundColor: '#10B98120' }]}>
+                    <Ionicons name="trending-up-outline" size={24} color="#10B981" />
+                  </View>
+                  <Text style={[styles.featureTitle, { color: theme.colors.textPrimary }]}>Trend Detection</Text>
+                  <Text style={[styles.featureDescription, { color: theme.colors.textSecondary }]}>
+                    Identify trends and forecasts
+                  </Text>
+                </View>
+              </Card>
+
+              <Card style={styles.featureCard}>
+                <View style={styles.featureContent}>
+                  <View style={[styles.featureIcon, { backgroundColor: '#F59E0B20' }]}>
+                    <Ionicons name="alert-circle-outline" size={24} color="#F59E0B" />
+                  </View>
+                  <Text style={[styles.featureTitle, { color: theme.colors.textPrimary }]}>Anomaly Detection</Text>
+                  <Text style={[styles.featureDescription, { color: theme.colors.textSecondary }]}>
+                    Discover outliers and patterns
+                  </Text>
+                </View>
+              </Card>
+            </View>
           </View>
         </View>
-
-        <View style={styles.featureCard}>
-          <Ionicons name="trending-up-outline" size={32} color="#10B981" />
-          <View style={styles.featureContent}>
-            <Text style={styles.featureTitle}>Trend Detection</Text>
-            <Text style={styles.featureDescription}>
-              Identify trends and forecasting opportunities
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.featureCard}>
-          <Ionicons name="alert-circle-outline" size={32} color="#F59E0B" />
-          <View style={styles.featureContent}>
-            <Text style={styles.featureTitle}>Anomaly Detection</Text>
-            <Text style={styles.featureDescription}>
-              Discover outliers and unusual patterns
-            </Text>
-          </View>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
   },
-  header: {
+  content: {
     padding: 20,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
   },
-  title: {
-    fontSize: 24,
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
-    marginBottom: 4,
+    marginBottom: 16,
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#6B7280',
+  inputCard: {
+    marginBottom: 24,
   },
   inputContainer: {
-    padding: 20,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    padding: 16,
+  },
+  inputLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 12,
   },
   questionInput: {
     borderWidth: 1,
-    borderColor: '#E5E7EB',
     borderRadius: 8,
     padding: 16,
     fontSize: 16,
     minHeight: 80,
     textAlignVertical: 'top',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   askButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2563EB',
-    paddingVertical: 12,
-    borderRadius: 8,
-    gap: 8,
-  },
-  askButtonDisabled: {
-    backgroundColor: '#9CA3AF',
-  },
-  askButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  suggestionsContainer: {
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 16,
+    marginTop: 0,
   },
   suggestionsGrid: {
     gap: 12,
   },
   suggestionCard: {
-    backgroundColor: '#FFFFFF',
+    marginBottom: 0,
+  },
+  suggestionContent: {
     padding: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
   },
   suggestionText: {
     fontSize: 14,
-    color: '#2563EB',
     fontWeight: '500',
   },
-  insightsContainer: {
-    padding: 20,
-  },
-  emptyState: {
-    backgroundColor: '#FFFFFF',
-    padding: 40,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
   loadingCard: {
+    marginBottom: 16,
+  },
+  loadingContent: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
   },
   loadingText: {
     marginLeft: 12,
     fontSize: 16,
     fontWeight: '500',
   },
+  emptyCard: {
+    padding: 0,
+  },
+  emptyState: {
+    alignItems: 'center',
+    padding: 32,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptyDescription: {
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  insightsList: {
+    gap: 12,
+  },
   insightCard: {
-    padding: 20,
-    borderRadius: 12,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    marginBottom: 0,
   },
   insightHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12,
+    padding: 16,
+    paddingBottom: 8,
   },
   insightTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  insightIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  insightTitleContainer: {
     flex: 1,
   },
   insightTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
-    marginLeft: 12,
-    flex: 1,
-  },
-  confidenceContainer: {
-    backgroundColor: '#F0F9FF',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+    marginBottom: 2,
   },
   confidenceText: {
     fontSize: 12,
     fontWeight: '500',
   },
   insightContent: {
-    fontSize: 15,
-    lineHeight: 22,
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptySubtext: {
     fontSize: 14,
-    textAlign: 'center',
+    lineHeight: 20,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
   },
-  featuresContainer: {
-    padding: 20,
+  featuresGrid: {
+    gap: 16,
   },
   featureCard: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    marginBottom: 0,
   },
   featureContent: {
-    flex: 1,
-    marginLeft: 16,
+    alignItems: 'center',
+    padding: 16,
+  },
+  featureIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   featureTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
     marginBottom: 4,
+    textAlign: 'center',
   },
   featureDescription: {
-    fontSize: 14,
-    color: '#6B7280',
+    fontSize: 12,
+    textAlign: 'center',
+    lineHeight: 16,
   },
 });

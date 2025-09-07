@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Linking, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../styles/ThemeProvider';
 import { ColorSchemeModal } from '../components/ColorSchemeModal';
@@ -60,8 +61,8 @@ export default function SettingsScreen() {
 
   const openEmailSupport = async () => {
     try {
-      const subject = encodeURIComponent('Dashly App Support Request');
-      const body = encodeURIComponent(`Hi Dashly Support Team,
+      const subject = encodeURIComponent('SoroOne App Support Request');
+      const body = encodeURIComponent(`Hi SoroOne Support Team,
 
 I need help with the following:
 
@@ -72,22 +73,22 @@ Device: [Your device information]
 
 Thank you!`);
       
-      const mailtoUrl = `mailto:support@dashly.app?subject=${subject}&body=${body}`;
+      const mailtoUrl = `mailto:support@soroone.app?subject=${subject}&body=${body}`;
       const canOpen = await Linking.canOpenURL(mailtoUrl);
       
       if (canOpen) {
         await Linking.openURL(mailtoUrl);
       } else {
-        Alert.alert('Email Not Available', 'Please email us at support@dashly.app');
+        Alert.alert('Email Not Available', 'Please email us at support@soroone.app');
       }
     } catch (error) {
-      Alert.alert('Error', 'Could not open email client. Please email us at support@dashly.app');
+      Alert.alert('Error', 'Could not open email client. Please email us at support@soroone.app');
     }
   };
 
   const openWebsite = async () => {
     try {
-      const url = 'https://dashly.app/support';
+      const url = 'https://soroone.app/support';
       const canOpen = await Linking.canOpenURL(url);
       
       if (canOpen) {
@@ -131,8 +132,8 @@ Thank you!`);
 
   const rateApp = () => {
     Alert.alert(
-      'Rate Dashly',
-      'Thank you for using Dashly! Your feedback helps us improve.',
+      'Rate SoroOne',
+      'Thank you for using SoroOne! Your feedback helps us improve.',
       [
         {
           text: 'Rate on App Store',
@@ -156,7 +157,7 @@ Thank you!`);
 
   const openAppStore = async () => {
     try {
-      const url = 'https://apps.apple.com/app/dashly/id123456789'; // Replace with actual App Store URL
+      const url = 'https://apps.apple.com/app/soroone/id123456789'; // Replace with actual App Store URL
       await Linking.openURL(url);
     } catch (error) {
       Alert.alert('Error', 'Could not open App Store');
@@ -165,7 +166,7 @@ Thank you!`);
 
   const openGooglePlay = async () => {
     try {
-      const url = 'https://play.google.com/store/apps/details?id=com.dashly.app'; // Replace with actual Play Store URL
+      const url = 'https://play.google.com/store/apps/details?id=com.soroone.app'; // Replace with actual Play Store URL
       await Linking.openURL(url);
     } catch (error) {
       Alert.alert('Error', 'Could not open Google Play');
@@ -174,8 +175,8 @@ Thank you!`);
 
   const sendFeedback = async () => {
     try {
-      const subject = encodeURIComponent('Dashly App Feedback');
-      const body = encodeURIComponent(`Hi Dashly Team,
+      const subject = encodeURIComponent('SoroOne App Feedback');
+      const body = encodeURIComponent(`Hi SoroOne Team,
 
 Here's my feedback about the app:
 
@@ -193,16 +194,16 @@ App Version: 1.1.0
 
 Thank you for creating this amazing app!`);
       
-      const mailtoUrl = `mailto:feedback@dashly.app?subject=${subject}&body=${body}`;
+      const mailtoUrl = `mailto:feedback@soroone.app?subject=${subject}&body=${body}`;
       await Linking.openURL(mailtoUrl);
     } catch (error) {
-      Alert.alert('Error', 'Could not open email client. Please email us at feedback@dashly.app');
+      Alert.alert('Error', 'Could not open email client. Please email us at feedback@soroone.app');
     }
   };
 
   return (
-    <>
-      <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
+      <ScrollView style={{ flex: 1 }}>
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Appearance</Text>
           
@@ -303,7 +304,7 @@ Thank you for creating this amazing app!`);
               <View style={styles.settingText}>
                 <Text style={[styles.settingTitle, { color: theme.colors.textPrimary }]}>Rate App</Text>
                 <Text style={[styles.settingDescription, { color: theme.colors.textSecondary }]}>
-                  Rate and review Dashly
+                                    Rate and review SoroOne
                 </Text>
               </View>
             </View>
@@ -316,7 +317,7 @@ Thank you for creating this amazing app!`);
               <View style={styles.settingText}>
                 <Text style={[styles.settingTitle, { color: theme.colors.textPrimary }]}>About</Text>
                 <Text style={[styles.settingDescription, { color: theme.colors.textSecondary }]}>
-                  Version 1.1.0 - Learn more about Dashly
+                  Version 1.1.0 - Learn more about SoroOne
                 </Text>
               </View>
             </View>
@@ -334,7 +335,7 @@ Thank you for creating this amazing app!`);
         visible={showAboutModal}
         onClose={closeAboutModal}
       />
-    </>
+    </SafeAreaView>
   );
 }
 
@@ -344,17 +345,12 @@ const styles = StyleSheet.create({
   },
   section: {
     marginTop: 20,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#E5E7EB',
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     paddingHorizontal: 20,
     paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
   },
   settingItem: {
     flexDirection: 'row',
@@ -362,8 +358,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
   },
   settingLeft: {
     flexDirection: 'row',

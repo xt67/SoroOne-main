@@ -1,14 +1,17 @@
 {
-	"name": "soroone-main",
-	"version": "1.0.0",
-	"private": true,
-	"main": "./index.js",
+  "name": "soroone-main",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./index.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest",
+    "lint": "npx eslint . --ext .js,.jsx",
+    "type-check": "npx tsc --noEmit --skipLibCheck",
     "reset-project": "node ./scripts/reset-project.js"
   },
   "dependencies": {
@@ -33,9 +36,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/jest": "^30.0.0",
     "@types/papaparse": "^5.3.16",
-    "@types/react": "~18.3.0",
+    "@types/react": "~19.0.10",
     "@types/react-test-renderer": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
     "jest": "^29.7.0",
     "jest-expo": "~53.0.10",
     "react-test-renderer": "18.3.1",

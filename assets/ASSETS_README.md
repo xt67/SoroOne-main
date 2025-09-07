@@ -1,4 +1,4 @@
-# Asset Requirements for Dashly
+# Asset Requirements for SoroOne
 
 ## Required Assets for Play Store
 
@@ -18,7 +18,7 @@
 - **File:** splash.png
 - **Size:** 1284x2778 pixels (iPhone 12 Pro Max resolution)
 - **Format:** PNG
-- **Description:** App loading screen with Dashly branding
+- **Description:** App loading screen with SoroOne branding
 
 ### Favicon
 - **File:** favicon.png

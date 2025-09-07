@@ -1,5 +1,5 @@
 /**
- * Core data types for Dashly app
+ * Core data types for SoroOne app
  */
 
 export interface ImportedDataset {

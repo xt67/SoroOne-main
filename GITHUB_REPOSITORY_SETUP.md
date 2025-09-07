@@ -6,9 +6,9 @@
 Navigate to: `Settings` tab in your GitHub repository
 
 #### General Settings:
-- [x] ✅ **Repository name**: `Dashly-1.0`
-- [x] ✅ **Description**: "📊 Dashly - Data Analytics & Visualization for Mobile"
-- [x] ✅ **Website**: `https://dashly.app` (optional)
+- [x] ✅ **Repository name**: `SoroOne-main`
+- [x] ✅ **Description**: "📊 SoroOne - Data Analytics & Visualization for Mobile"
+- [x] ✅ **Website**: `https://soroone.app` (optional)
 - [x] ✅ **Topics**: `react-native`, `expo`, `data-visualization`, `analytics`, `mobile-app`, `typescript`, `dashboard`, `charts`
 
 #### Features to Enable:
@@ -164,7 +164,7 @@ Navigate to: `Settings` → `Pages`
 #### For Documentation:
 - **Source**: Deploy from a branch
 - **Branch**: `main` / `docs` folder
-- **Custom domain**: `docs.dashly.app` (optional)
+- **Custom domain**: `docs.soroone.app` (optional)
 
 ### 7. **Discussions Setup**
 Navigate to: `Discussions` tab
@@ -224,8 +224,8 @@ Navigate to: `Insights` tab
 ```yaml
 # Funding options
 github: [xt67]
-patreon: dashly
-ko_fi: dashly
+patreon: soroone
+ko_fi: soroone
 ```
 
 ---

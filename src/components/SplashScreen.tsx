@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated } from 'react-native';
 import { Logo } from './Logo';
 import { useTheme } from '../styles/ThemeProvider';
 
@@ -16,27 +16,27 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onAnimationEnd }) =>
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 1000,
+        duration: 300, // Reduced from 1000ms to 300ms
         useNativeDriver: true,
       }),
       Animated.spring(scaleAnim, {
         toValue: 1,
-        tension: 50,
-        friction: 7,
+        tension: 100, // Increased tension for faster animation
+        friction: 8,
         useNativeDriver: true,
       }),
     ]).start();
 
-    // Auto-hide splash screen after animation
+    // Auto-hide splash screen quickly
     const timer = setTimeout(() => {
       Animated.timing(fadeAnim, {
         toValue: 0,
-        duration: 500,
+        duration: 200, // Reduced from 500ms to 200ms
         useNativeDriver: true,
       }).start(() => {
         onAnimationEnd();
       });
-    }, 2500);
+    }, 800); // Reduced from 2500ms to 800ms
 
     return () => clearTimeout(timer);
   }, []);
@@ -52,15 +52,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onAnimationEnd }) =>
           },
         ]}
       >
-        <Logo size="large" showText={true} />
-        <Text style={[styles.tagline, { color: theme.colors.textSecondary }]}>
-          Transform your data into insights
-        </Text>
-        <View style={styles.loadingIndicator}>
-          <View style={[styles.loadingDot, { backgroundColor: theme.colors.primary }]} />
-          <View style={[styles.loadingDot, { backgroundColor: theme.colors.primary }]} />
-          <View style={[styles.loadingDot, { backgroundColor: theme.colors.primary }]} />
-        </View>
+        <Logo size="large" showText={false} />
       </Animated.View>
     </View>
   );
@@ -75,24 +67,5 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
-    gap: 20,
-  },
-  tagline: {
-    fontSize: 18,
-    fontWeight: '300',
-    textAlign: 'center',
-    marginTop: 16,
-    letterSpacing: 0.5,
-  },
-  loadingIndicator: {
-    flexDirection: 'row',
-    gap: 8,
-    marginTop: 40,
-  },
-  loadingDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#2563EB',
   },
 });

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SoroOne Icon Generator</title>
+</head>
+<body>
+    <canvas id="iconCanvas" width="1024" height="1024"></canvas>
+    <br>
+    <button onclick="downloadIcon()">Download Icon</button>
+    
+    <script>
+        const canvas = document.getElementById('iconCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Background gradient
+        const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
+        gradient.addColorStop(0, '#3B82F6');  // Blue
+        gradient.addColorStop(1, '#1E40AF');  // Darker blue
+        
+        // Draw background
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 1024, 1024);
+        
+        // Draw rounded rectangle background
+        const cornerRadius = 150;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.beginPath();
+        ctx.roundRect(80, 80, 864, 864, cornerRadius);
+        ctx.fill();
+        
+        // Draw chart bars (representing data visualization)
+        const barColors = ['#60A5FA', '#34D399', '#FBBF24', '#F87171'];
+        const barWidths = [120, 120, 120, 120];
+        const barHeights = [300, 450, 250, 380];
+        const startX = 200;
+        const startY = 700;
+        const spacing = 150;
+        
+        for (let i = 0; i < 4; i++) {
+            ctx.fillStyle = barColors[i];
+            const x = startX + i * spacing;
+            const y = startY - barHeights[i];
+            
+            // Draw bar with rounded top
+            ctx.beginPath();
+            ctx.roundRect(x, y, barWidths[i], barHeights[i], [15, 15, 0, 0]);
+            ctx.fill();
+        }
+        
+        // Draw "S" letter
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 320px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('S', 512, 320);
+        
+        // Add subtle shadow
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        ctx.shadowBlur = 20;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 10;
+        
+        function downloadIcon() {
+            const link = document.createElement('a');
+            link.download = 'icon.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Auto-download after 1 second
+        setTimeout(downloadIcon, 1000);
+    </script>
+</body>
+</html>
