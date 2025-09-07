@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../styles/ThemeProvider';
 
@@ -108,15 +109,16 @@ export default function AIInsightsScreen() {
   ];
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>AI-Powered Insights</Text>
-        <Text style={styles.subtitle}>
-          Ask questions about your data in natural language
-        </Text>
-      </View>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <ScrollView style={{ flex: 1 }}>
+        <View style={styles.header}>
+          <Text style={styles.title}>AI-Powered Insights</Text>
+          <Text style={styles.subtitle}>
+            Ask questions about your data in natural language
+          </Text>
+        </View>
 
-      <View style={styles.inputContainer}>
+        <View style={styles.inputContainer}>
         <TextInput
           style={styles.questionInput}
           value={question}
@@ -244,7 +246,8 @@ export default function AIInsightsScreen() {
           </View>
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

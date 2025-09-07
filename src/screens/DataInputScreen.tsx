@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import { useNavigation } from '@react-navigation/native';
@@ -7,6 +8,8 @@ import { dataProcessor } from '../utils/dataProcessor';
 import { dataService } from '../services/DataService';
 import { useTheme } from '../styles/ThemeProvider';
 import { DatasetActionModal } from '../components/DatasetActionModal';
+import { Button } from '../components/Button';
+import { Card } from '../components/Card';
 import type { ImportedDataset, NavigationParamList } from '../types';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import CSVTestComponent from '../components/CSVTestComponent';
@@ -363,149 +366,206 @@ export default function DataInputScreen() {
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
       {isLoading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
-          <Text style={[styles.loadingText, { color: theme.colors.textPrimary }]}>
+          <Text style={[styles.loadingText, { color: '#FFFFFF' }]}>
             Processing file...
           </Text>
         </View>
       )}
 
-      <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
-        <Text style={[styles.title, { color: theme.colors.textPrimary }]}>Import Your Data</Text>
-        <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
-          Choose from multiple data sources to get started
-        </Text>
-      </View>
-
-      <View style={styles.optionsContainer}>
-        {/* Temporary CSV Test Button */}
-        <TouchableOpacity 
-          style={[styles.testButton, { backgroundColor: '#FFC107' }]}
-          onPress={testCSVProcessing}
-        >
-          <Text style={styles.testButtonText}>Test CSV Processing</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={[styles.optionCard, { backgroundColor: theme.colors.surface }]}
-          onPress={() => handleFilePick('excel')}
-          disabled={isLoading}
-        >
-          <Ionicons name="document-outline" size={48} color="#10B981" />
-          <Text style={[styles.optionTitle, { color: theme.colors.textPrimary }]}>Excel Files</Text>
-          <Text style={[styles.optionDescription, { color: theme.colors.textSecondary }]}>
-            Upload .xlsx and .xls files directly from your device
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={[styles.title, { color: theme.colors.textPrimary }]}>
+            Import Your Data
           </Text>
-          <View style={styles.supportedFormats}>
-            <Text style={styles.formatText}>.xlsx</Text>
-            <Text style={styles.formatText}>.xls</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={[styles.optionCard, { backgroundColor: theme.colors.surface }]}
-          onPress={() => handleFilePick('csv')}
-          disabled={isLoading}
-        >
-          <Ionicons name="grid-outline" size={48} color="#2563EB" />
-          <Text style={[styles.optionTitle, { color: theme.colors.textPrimary }]}>CSV Files</Text>
-          <Text style={[styles.optionDescription, { color: theme.colors.textSecondary }]}>
-            Import comma-separated values files for quick analysis
+          <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
+            Transform your data into powerful insights
           </Text>
-          <View style={styles.supportedFormats}>
-            <Text style={styles.formatText}>.csv</Text>
-          </View>
-        </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity 
-          style={[styles.optionCard, { backgroundColor: theme.colors.surface }]}
-          onPress={() => handleFilePick('sql')}
-          disabled={isLoading}
-        >
-          <Ionicons name="server-outline" size={48} color="#8B5CF6" />
-          <Text style={[styles.optionTitle, { color: theme.colors.textPrimary }]}>SQL Files</Text>
-          <Text style={[styles.optionDescription, { color: theme.colors.textSecondary }]}>
-            Import SQL dump files and database scripts
+        {/* Quick Actions */}
+        <View style={styles.quickActions}>
+          <TouchableOpacity 
+            style={[styles.quickAction, { backgroundColor: theme.colors.primary }]}
+            onPress={() => handleFilePick('csv')}
+            disabled={isLoading}
+          >
+            <View style={styles.quickActionContent}>
+              <Ionicons name="flash" size={24} color="#FFFFFF" />
+              <Text style={styles.quickActionText}>Quick Import</Text>
+            </View>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[styles.quickAction, { backgroundColor: theme.colors.secondary }]}
+            onPress={testCSVProcessing}
+            disabled={isLoading}
+          >
+            <View style={styles.quickActionContent}>
+              <Ionicons name="play-circle" size={24} color="#FFFFFF" />
+              <Text style={styles.quickActionText}>Try Demo</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* Import Options */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>
+            Choose Import Method
           </Text>
-          <View style={styles.supportedFormats}>
-            <Text style={styles.formatText}>.sql</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-
-      {/* Temporary CSV Test Component for debugging - Commented out for production */}
-      {/* 
-      <View style={[styles.section, { backgroundColor: theme.colors.surface }]}>
-        <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Debug CSV Processing</Text>
-        <CSVTestComponent />
-      </View>
-      */}
-
-      <View style={styles.recentSection}>
-        <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Recent Files</Text>
-        {recentFiles.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Ionicons name="folder-outline" size={64} color={theme.colors.textSecondary} />
-            <Text style={[styles.emptyText, { color: theme.colors.textSecondary }]}>No recent files</Text>
-            <Text style={[styles.emptySubtext, { color: theme.colors.textSecondary }]}>
-              Your recently imported files will appear here
-            </Text>
-          </View>
-        ) : (
-          <View>
-            {recentFiles.map((file) => (
+          
+          <View style={styles.importGrid}>
+            <Card variant="elevated" style={styles.importCard}>
               <TouchableOpacity 
-                key={file.id} 
-                style={[styles.recentFileItem, { backgroundColor: theme.colors.surface }]}
+                style={styles.importOption}
+                onPress={() => handleFilePick('excel')}
+                disabled={isLoading}
               >
-                <Ionicons 
-                  name={file.type === 'excel' ? 'document-outline' : file.type === 'csv' ? 'grid-outline' : 'server-outline'} 
-                  size={24} 
-                  color={theme.colors.primary} 
-                />
-                <View style={styles.fileInfo}>
-                  <Text style={[styles.fileName, { color: theme.colors.textPrimary }]}>{file.name}</Text>
-                  <Text style={[styles.fileDetails, { color: theme.colors.textSecondary }]}>
-                    {file.rowCount} rows • {file.columnCount} columns
+                <View style={[styles.iconContainer, { backgroundColor: '#10B981' }]}>
+                  <Ionicons name="document-text" size={32} color="#FFFFFF" />
+                </View>
+                <View style={styles.importContent}>
+                  <Text style={[styles.importTitle, { color: theme.colors.textPrimary }]}>
+                    Excel Files
                   </Text>
+                  <Text style={[styles.importDescription, { color: theme.colors.textSecondary }]}>
+                    Import .xlsx and .xls spreadsheets
+                  </Text>
+                  <View style={styles.formats}>
+                    <Text style={[styles.formatBadge, { backgroundColor: theme.colors.success, color: '#FFFFFF' }]}>
+                      .xlsx
+                    </Text>
+                    <Text style={[styles.formatBadge, { backgroundColor: theme.colors.success, color: '#FFFFFF' }]}>
+                      .xls
+                    </Text>
+                  </View>
                 </View>
               </TouchableOpacity>
-            ))}
+            </Card>
+
+            <Card variant="elevated" style={styles.importCard}>
+              <TouchableOpacity 
+                style={styles.importOption}
+                onPress={() => handleFilePick('csv')}
+                disabled={isLoading}
+              >
+                <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary }]}>
+                  <Ionicons name="grid" size={32} color="#FFFFFF" />
+                </View>
+                <View style={styles.importContent}>
+                  <Text style={[styles.importTitle, { color: theme.colors.textPrimary }]}>
+                    CSV Files
+                  </Text>
+                  <Text style={[styles.importDescription, { color: theme.colors.textSecondary }]}>
+                    Quick import for structured data
+                  </Text>
+                  <View style={styles.formats}>
+                    <Text style={[styles.formatBadge, { backgroundColor: theme.colors.primary, color: '#FFFFFF' }]}>
+                      .csv
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </Card>
+
+            <Card variant="elevated" style={styles.importCard}>
+              <TouchableOpacity 
+                style={styles.importOption}
+                onPress={() => handleFilePick('sql')}
+                disabled={isLoading}
+              >
+                <View style={[styles.iconContainer, { backgroundColor: theme.colors.accent }]}>
+                  <Ionicons name="server" size={32} color="#FFFFFF" />
+                </View>
+                <View style={styles.importContent}>
+                  <Text style={[styles.importTitle, { color: theme.colors.textPrimary }]}>
+                    SQL Files
+                  </Text>
+                  <Text style={[styles.importDescription, { color: theme.colors.textSecondary }]}>
+                    Database exports and scripts
+                  </Text>
+                  <View style={styles.formats}>
+                    <Text style={[styles.formatBadge, { backgroundColor: theme.colors.accent, color: '#FFFFFF' }]}>
+                      .sql
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </Card>
           </View>
-        )}
-      </View>
+        </View>
 
-      {/* CSV Upload Troubleshooting Guide:
-       * 
-       * If CSV files are not opening or processing correctly, check these common issues:
-       * 
-       * 1. File picker issues:
-       *    - Check if file is selected successfully
-       *    - Verify MIME type is supported
-       *    - Ensure file URI is valid
-       * 
-       * 2. File reading issues:
-       *    - Check if file exists at URI
-       *    - Verify file permissions
-       *    - Ensure file content is readable
-       * 
-       * 3. CSV parsing issues:
-       *    - Check file format (UTF-8 encoding)
-       *    - Verify CSV structure (headers, delimiters)
-       *    - Look for special characters or encoding issues
-       * 
-       * 4. Database saving issues:
-       *    - Check database initialization
-       *    - Verify data transformation
-       *    - Check AsyncStorage permissions
-       * 
-       * Enable detailed console logging to debug each step.
-       */}
+        {/* Recent Files */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>
+              Recent Files
+            </Text>
+            {recentFiles.length > 0 && (
+              <TouchableOpacity>
+                <Text style={[styles.seeAllText, { color: theme.colors.primary }]}>
+                  See All
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          
+          {recentFiles.length === 0 ? (
+            <Card variant="outlined" style={styles.emptyCard}>
+              <View style={styles.emptyState}>
+                <Ionicons name="cloud-upload-outline" size={48} color={theme.colors.textSecondary} />
+                <Text style={[styles.emptyTitle, { color: theme.colors.textPrimary }]}>
+                  No files yet
+                </Text>
+                <Text style={[styles.emptyDescription, { color: theme.colors.textSecondary }]}>
+                  Import your first file to get started with data analysis
+                </Text>
+                <Button
+                  title="Import File"
+                  onPress={() => handleFilePick('csv')}
+                  variant="outline"
+                  size="small"
+                  icon="add"
+                  style={{ marginTop: 16 }}
+                />
+              </View>
+            </Card>
+          ) : (
+            <View style={styles.recentList}>
+              {recentFiles.slice(0, 3).map((file) => (
+                <Card key={file.id} variant="outlined" style={styles.recentCard}>
+                  <TouchableOpacity style={styles.recentItem}>
+                    <View style={styles.recentIcon}>
+                      <Ionicons 
+                        name={getFileIcon(file.type)} 
+                        size={24} 
+                        color={getFileColor(file.type)} 
+                      />
+                    </View>
+                    <View style={styles.recentInfo}>
+                      <Text style={[styles.recentName, { color: theme.colors.textPrimary }]}>
+                        {file.name}
+                      </Text>
+                      <Text style={[styles.recentMeta, { color: theme.colors.textSecondary }]}>
+                        {file.rowCount?.toLocaleString()} rows • {file.columnCount} columns
+                      </Text>
+                      <Text style={[styles.recentDate, { color: theme.colors.textSecondary }]}>
+                        {formatDate(file.createdAt)}
+                      </Text>
+                    </View>
+                    <Ionicons name="chevron-forward" size={20} color={theme.colors.textSecondary} />
+                  </TouchableOpacity>
+                </Card>
+              ))}
+            </View>
+          )}
+        </View>
+      </ScrollView>
 
-      {/* Dataset Action Modal */}
       <DatasetActionModal
         visible={showActionModal}
         dataset={currentDataset}
@@ -514,14 +574,52 @@ export default function DataInputScreen() {
         onGetAIInsights={handleGetAIInsights}
         onEditWithSQL={handleEditWithSQL}
       />
-    </ScrollView>
+    </SafeAreaView>
   );
 }
+
+// Helper functions
+const getFileIcon = (type: string) => {
+  switch (type) {
+    case 'excel':
+      return 'document-text';
+    case 'csv':
+      return 'grid';
+    case 'sql':
+      return 'server';
+    default:
+      return 'document';
+  }
+};
+
+const getFileColor = (type: string) => {
+  switch (type) {
+    case 'excel':
+      return '#10B981';
+    case 'csv':
+      return '#6366F1';
+    case 'sql':
+      return '#8B5CF6';
+    default:
+      return '#6B7280';
+  }
+};
+
+const formatDate = (date: Date | string) => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - dateObj.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 1) return 'Today';
+  if (diffDays === 2) return 'Yesterday';
+  if (diffDays <= 7) return `${diffDays} days ago`;
+  return dateObj.toLocaleDateString();
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
   },
   loadingOverlay: {
     position: 'absolute',
@@ -529,7 +627,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
@@ -538,140 +636,156 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 16,
     fontWeight: '600',
+    color: '#FFFFFF',
   },
   header: {
-    padding: 20,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    paddingHorizontal: 24,
+    paddingTop: 32,
+    paddingBottom: 24,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#1F2937',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#6B7280',
-  },
-  optionsContainer: {
-    padding: 20,
-    gap: 16,
-  },
-  optionCard: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  optionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1F2937',
-    marginTop: 12,
+    fontSize: 32,
+    fontWeight: '800',
     marginBottom: 8,
   },
-  optionDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 12,
-  },
-  supportedFormats: {
-    flexDirection: 'row',
-    gap: 8,
-    flexWrap: 'wrap',
-  },
-  formatText: {
-    fontSize: 12,
-    color: '#2563EB',
-    backgroundColor: '#EFF6FF',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  recentSection: {
-    padding: 20,
-  },
-  sectionTitle: {
+  subtitle: {
     fontSize: 18,
+    fontWeight: '400',
+  },
+  quickActions: {
+    flexDirection: 'row',
+    paddingHorizontal: 24,
+    marginBottom: 32,
+    gap: 12,
+  },
+  quickAction: {
+    flex: 1,
+    borderRadius: 16,
+    padding: 16,
+  },
+  quickActionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  quickActionText: {
+    color: '#FFFFFF',
+    fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+  },
+  section: {
+    paddingHorizontal: 24,
+    marginBottom: 32,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 16,
   },
-  emptyState: {
-    backgroundColor: '#FFFFFF',
-    padding: 40,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
   },
-  emptyText: {
+  seeAllText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  importGrid: {
+    gap: 16,
+  },
+  importCard: {
+    marginBottom: 0,
+  },
+  importOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+  },
+  iconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  importContent: {
+    flex: 1,
+  },
+  importTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  importDescription: {
+    fontSize: 14,
+    marginBottom: 12,
+    lineHeight: 20,
+  },
+  formats: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  formatBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  emptyCard: {
+    padding: 0,
+  },
+  emptyState: {
+    alignItems: 'center',
+    padding: 32,
+  },
+  emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1F2937',
     marginTop: 16,
     marginBottom: 8,
   },
-  emptySubtext: {
+  emptyDescription: {
     fontSize: 14,
-    color: '#6B7280',
     textAlign: 'center',
+    lineHeight: 20,
   },
-  recentFileItem: {
+  recentList: {
+    gap: 12,
+  },
+  recentCard: {
+    padding: 0,
+  },
+  recentItem: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    marginBottom: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
   },
-  fileInfo: {
+  recentIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  recentInfo: {
     flex: 1,
-    marginLeft: 12,
   },
-  fileName: {
+  recentName: {
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: 2,
   },
-  fileDetails: {
+  recentMeta: {
     fontSize: 14,
+    marginBottom: 2,
   },
-  testButton: {
-    backgroundColor: '#FFC107',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginTop: 20,
-    alignSelf: 'center',
-  },
-  testButtonText: {
-    color: '#000',
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  section: {
-    padding: 20,
-    borderRadius: 12,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+  recentDate: {
+    fontSize: 12,
   },
 });

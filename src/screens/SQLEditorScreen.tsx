@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function SQLEditorScreen() {
@@ -15,7 +16,7 @@ export default function SQLEditorScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.toolbar}>
         <TouchableOpacity style={styles.toolbarButton} onPress={executeQuery}>
           <Ionicons 
@@ -81,7 +82,7 @@ export default function SQLEditorScreen() {
           </TouchableOpacity>
         </ScrollView>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

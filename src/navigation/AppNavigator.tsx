@@ -1,6 +1,8 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 // Import screens
@@ -19,6 +21,7 @@ const Tab = createBottomTabNavigator<NavigationParamList>();
 
 export default function AppNavigator() {
   const { theme, isDark } = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <NavigationContainer>
@@ -47,16 +50,33 @@ export default function AppNavigator() {
             tabBarInactiveTintColor: theme.colors.textSecondary,
             tabBarStyle: {
               backgroundColor: theme.colors.background,
-              borderTopWidth: 1,
-              borderTopColor: theme.colors.border,
-              height: 80,
-              paddingBottom: 10,
-              paddingTop: 10,
+              borderTopWidth: 0,
+              elevation: 0,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: -2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 8,
+              height: Platform.OS === 'android' ? 70 + insets.bottom : 85,
+              paddingBottom: Platform.OS === 'android' ? insets.bottom + 10 : 20,
+              paddingTop: 15,
+              paddingHorizontal: 10,
+            },
+            tabBarLabelStyle: {
+              fontSize: 11,
+              fontWeight: '600',
+              marginTop: 4,
+            },
+            tabBarIconStyle: {
+              marginTop: 2,
             },
             headerStyle: {
               backgroundColor: theme.colors.background,
-              borderBottomWidth: 1,
-              borderBottomColor: theme.colors.border,
+              borderBottomWidth: 0,
+              elevation: 0,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 8,
             },
             headerTintColor: theme.colors.textPrimary,
             headerTitleStyle: {

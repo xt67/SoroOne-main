@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Linking, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../styles/ThemeProvider';
 import { ColorSchemeModal } from '../components/ColorSchemeModal';
@@ -201,8 +202,8 @@ Thank you for creating this amazing app!`);
   };
 
   return (
-    <>
-      <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
+      <ScrollView style={{ flex: 1 }}>
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Appearance</Text>
           
@@ -334,7 +335,7 @@ Thank you for creating this amazing app!`);
         visible={showAboutModal}
         onClose={closeAboutModal}
       />
-    </>
+    </SafeAreaView>
   );
 }
 
