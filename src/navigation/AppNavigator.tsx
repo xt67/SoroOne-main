@@ -89,7 +89,7 @@ export default function AppNavigator() {
             component={DashboardScreen}
             options={{
               tabBarLabel: 'Home',
-              headerTitle: 'Home',
+              headerShown: false,
             }}
           />
           <Tab.Screen
