@@ -318,7 +318,7 @@ This project is licensed under the MIT License - see the [LICENSE.txt](./LICENSE
 
 ## 📞 Support & Contact
 
-- **📧 Email**: support@soroone.app
+- **📧 Email**: ssoroone@gmail.com
 - **🐛 Issues**: [GitHub Issues](https://github.com/xt67/SoroOne-main/issues)
 - **💬 Discussions**: [GitHub Discussions](https://github.com/xt67/SoroOne-main/discussions)
 - **📱 App Store**: Coming soon to Google Play Store
