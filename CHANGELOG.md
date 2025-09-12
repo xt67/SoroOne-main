@@ -7,14 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Planned for v1.2.0
+- Multi-model AI support (GPT, Claude, additional local models)
+- Voice-to-text data queries
+- Advanced statistical analysis and machine learning integration
+- Custom dashboard templates and advanced chart customization
+- Team collaboration features and workspace sharing
+
+## [1.2.0] - 2025-09-12
+
 ### Added
-- Placeholder for future features
+- 🤖 **Ollama Mistral AI Integration**: Local AI model for privacy-focused data analysis
+- 💬 **ChatGPT-style AI Interface**: Conversational data analysis with natural language queries
+- 🔧 **Network Diagnostics**: Automatic Ollama detection and setup assistance
+- 📊 **AI Dashboard Reports**: Automated dashboard summaries and insights generation
+- 🌐 **Platform-aware AI**: Web-based AI features with mobile diagnostics
+- 🎨 **Chart-based Logo**: Modern, data-focused branding and visual identity
+- 🖼️ **New Splash Screen**: Updated startup screen with SoroOne branding
+- 📱 **Enhanced Mobile Support**: Improved mobile experience with network troubleshooting
 
 ### Changed
-- Nothing yet
+- 🎨 **Complete UI Redesign**: Simplified and modernized interface design
+- 🤖 **AI Screen Overhaul**: Transformed from cluttered interface to clean chat experience
+- 📊 **Dashboard Improvements**: Better data visualization and real-time chart generation
+- 🗄️ **SQL Editor Enhancement**: Improved syntax highlighting and query execution
+- ⚙️ **Settings Streamlining**: Simplified settings with focus on essential features
+- 🎯 **Logo and Branding**: Updated from "Data Analytics" to "SoroOne" throughout app
 
 ### Fixed
-- Nothing yet
+- 🐛 **TypeScript Errors**: Resolved all compilation errors and type safety issues
+- 📱 **Mobile Compatibility**: Fixed import errors and app startup issues
+- 🔗 **Network Connectivity**: Improved Ollama connection handling and error recovery
+- 📊 **Dashboard Data Flow**: Fixed dataset integration with visualization components
+- 🌐 **Cross-platform Support**: Resolved platform-specific compatibility issues
+
+### Technical
+- ⬆️ **Framework Update**: Updated to React Native 0.79.5 and React 19.0.0
+- 🔧 **Dependency Management**: Cleaned up package.json with legacy peer deps support
+- 🏗️ **Build System**: Improved Metro bundling and cache management
+- 🛠️ **Development Tools**: Enhanced TypeScript configuration and error checking
+- 📝 **Code Quality**: Comprehensive code review and optimization
 
 ## [1.1.0] - 2025-07-14
 

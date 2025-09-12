@@ -2,30 +2,14 @@
  * Polyfills for React Native / Expo compatibility
  */
 
-// Polyfill for TurboModuleRegistry PlatformConstants issue
-if (typeof global !== 'undefined') {
-  // Add polyfill for missing modules
-  global.__turboModuleProxy = global.__turboModuleProxy || function(name) {
-    if (name === 'PlatformConstants') {
-      // Return a basic platform constants object
-      return {
-        osVersion: '',
-        model: '',
-        brand: '',
-        manufacturer: '',
-      };
-    }
-    return null;
-  };
-}
-
-// Console polyfill for better debugging
-if (typeof console === 'undefined') {
-  global.console = {
-    log: () => {},
-    warn: () => {},
-    error: () => {},
-    info: () => {},
-    debug: () => {},
-  };
+// Only add polyfills if actually needed
+if (typeof global !== 'undefined' && !global.__turboModuleProxy) {
+  // Minimal TurboModule polyfill - only if missing
+  try {
+    global.__turboModuleProxy = function(name) {
+      return null; // Let React Native handle modules normally
+    };
+  } catch (e) {
+    // Ignore polyfill errors on mobile
+  }
 }

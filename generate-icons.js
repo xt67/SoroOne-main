@@ -5,72 +5,132 @@ const { createCanvas, loadImage } = require('canvas');
 const canvas = createCanvas(1024, 1024);
 const ctx = canvas.getContext('2d');
 
-// Background gradient
+// Background gradient (white to light gray)
 const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
-gradient.addColorStop(0, '#3B82F6');  // Blue
-gradient.addColorStop(1, '#1E40AF');  // Darker blue
+gradient.addColorStop(0, '#FFFFFF');
+gradient.addColorStop(1, '#F8F9FA');
 
-// Draw background with rounded corners
+// Draw background
 ctx.fillStyle = gradient;
 ctx.fillRect(0, 0, 1024, 1024);
 
-// Add rounded rectangle overlay
-ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+// Draw chart container background
+ctx.fillStyle = '#FFFFFF';
+ctx.strokeStyle = '#E5E7EB';
+ctx.lineWidth = 4;
 ctx.beginPath();
-ctx.roundRect(80, 80, 864, 864, 150);
+ctx.roundRect(150, 200, 724, 500, 20);
 ctx.fill();
+ctx.stroke();
 
-// Draw chart bars (representing data visualization)
-const barColors = ['#60A5FA', '#34D399', '#FBBF24', '#F87171'];
+// Draw chart bars
 const barData = [
-  { x: 200, height: 300 },
-  { x: 350, height: 450 },
-  { x: 500, height: 250 },
-  { x: 650, height: 380 }
+    { x: 220, y: 350, height: 280 },
+    { x: 330, y: 280, height: 350 },
+    { x: 440, y: 400, height: 230 },
+    { x: 550, y: 320, height: 310 },
+    { x: 660, y: 250, height: 380 }
 ];
 
-barData.forEach((bar, i) => {
-  ctx.fillStyle = barColors[i];
-  const barWidth = 120;
-  const y = 700 - bar.height;
-  
-  ctx.beginPath();
-  ctx.roundRect(bar.x, y, barWidth, bar.height, [15, 15, 0, 0]);
-  ctx.fill();
+ctx.fillStyle = '#1F2937';
+barData.forEach(bar => {
+    ctx.beginPath();
+    ctx.roundRect(bar.x, bar.y, 80, bar.height, 8);
+    ctx.fill();
 });
 
-// Draw "S" letter
-ctx.fillStyle = '#FFFFFF';
-ctx.font = 'bold 320px Arial';
+// Draw trend line
+ctx.strokeStyle = '#3B82F6';
+ctx.lineWidth = 6;
+ctx.lineCap = 'round';
+ctx.lineJoin = 'round';
+ctx.beginPath();
+ctx.moveTo(260, 350);
+ctx.lineTo(370, 280);
+ctx.lineTo(480, 400);
+ctx.lineTo(590, 320);
+ctx.lineTo(700, 250);
+ctx.stroke();
+
+// Draw trend dots
+ctx.fillStyle = '#3B82F6';
+const dots = [
+    { x: 260, y: 350 },
+    { x: 370, y: 280 },
+    { x: 480, y: 400 },
+    { x: 590, y: 320 },
+    { x: 700, y: 250 }
+];
+
+dots.forEach(dot => {
+    ctx.beginPath();
+    ctx.arc(dot.x, dot.y, 8, 0, 2 * Math.PI);
+    ctx.fill();
+});
+
+// Draw axes
+ctx.strokeStyle = '#9CA3AF';
+ctx.lineWidth = 2;
+// X-axis
+ctx.beginPath();
+ctx.moveTo(200, 650);
+ctx.lineTo(820, 650);
+ctx.stroke();
+// Y-axis
+ctx.beginPath();
+ctx.moveTo(200, 230);
+ctx.lineTo(200, 650);
+ctx.stroke();
+
+// Draw "SoroOne" text
+ctx.fillStyle = '#1F2937';
+ctx.font = 'bold 120px Arial, sans-serif';
 ctx.textAlign = 'center';
 ctx.textBaseline = 'middle';
-ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-ctx.shadowBlur = 20;
+
+// Add text shadow
+ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+ctx.shadowBlur = 8;
 ctx.shadowOffsetX = 0;
-ctx.shadowOffsetY = 10;
-ctx.fillText('S', 512, 320);
+ctx.shadowOffsetY = 4;
+
+ctx.fillText('SoroOne', 512, 800);
 
 // Save as PNG
 const buffer = canvas.toBuffer('image/png');
-fs.writeFileSync('./icon.png', buffer);
+fs.writeFileSync('./assets/icon.png', buffer);
 
-// Create adaptive icon (same but slightly different positioning)
+// Create adaptive icon (simpler chart version)
 const adaptiveCanvas = createCanvas(1024, 1024);
 const adaptiveCtx = adaptiveCanvas.getContext('2d');
 
-// Simpler version for adaptive icon - just the S on transparent background
-adaptiveCtx.fillStyle = '#3B82F6';
+// White circle background
+adaptiveCtx.fillStyle = '#FFFFFF';
 adaptiveCtx.beginPath();
 adaptiveCtx.arc(512, 512, 400, 0, Math.PI * 2);
 adaptiveCtx.fill();
 
-adaptiveCtx.fillStyle = '#FFFFFF';
-adaptiveCtx.font = 'bold 280px Arial';
+// Simple chart bars
+const adaptiveBars = [
+    { x: 400, y: 400, height: 150 },
+    { x: 450, y: 350, height: 200 },
+    { x: 500, y: 450, height: 100 },
+    { x: 550, y: 380, height: 170 }
+];
+
+adaptiveCtx.fillStyle = '#1F2937';
+adaptiveBars.forEach(bar => {
+    adaptiveCtx.fillRect(bar.x, bar.y, 30, bar.height);
+});
+
+// SoroOne text
+adaptiveCtx.fillStyle = '#1F2937';
+adaptiveCtx.font = 'bold 80px Arial';
 adaptiveCtx.textAlign = 'center';
 adaptiveCtx.textBaseline = 'middle';
-adaptiveCtx.fillText('S', 512, 512);
+adaptiveCtx.fillText('SoroOne', 512, 650);
 
 const adaptiveBuffer = adaptiveCanvas.toBuffer('image/png');
-fs.writeFileSync('./adaptive-icon.png', adaptiveBuffer);
+fs.writeFileSync('./assets/adaptive-icon.png', adaptiveBuffer);
 
-console.log('Icons generated successfully!');
+console.log('SoroOne icons generated successfully!');

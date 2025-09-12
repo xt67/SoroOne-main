@@ -1,10 +1,9 @@
 /**
- * Polyfill for TurboModuleRegistry issues in Expo SDK 53
- * This resolves PlatformConstants module not found errors
+ * Entry point for SoroOne app
  */
 
-// Early polyfill before other imports
-import './polyfills';
+// Temporarily disable polyfills to debug TypeError issues
+// import './polyfills';
 
 import { registerRootComponent } from 'expo';
 import App from './App';

@@ -7,6 +7,7 @@ import { DashboardViewer } from '../components/DashboardViewer';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { dataService } from '../services/DataService';
+import { ollamaService } from '../services/OllamaService';
 import { useTheme } from '../styles/ThemeProvider';
 import type { Dataset, DataSource, Dashboard, NavigationParamList } from '../types';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -22,6 +23,7 @@ export default function DashboardScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedDashboard, setSelectedDashboard] = useState<Dashboard | null>(null);
   const [showDashboardViewer, setShowDashboardViewer] = useState(false);
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
 
   useEffect(() => {
     loadDashboardData();
@@ -68,30 +70,41 @@ export default function DashboardScreen() {
     }
 
     try {
+      // Get the most recently imported dataset
+      const availableDatasets = await dataService.getDatasets();
+      if (availableDatasets.length === 0) {
+        Alert.alert('No Dataset Available', 'Please upload and process some data first.');
+        return;
+      }
+      // Use the last dataset (most recently imported)
+      const dataset = availableDatasets[availableDatasets.length - 1];
+      const dataRows = dataset.data;
+      
+      if (!dataRows || dataRows.length === 0) {
+        Alert.alert('Empty Dataset', 'The dataset contains no data to visualize.');
+        return;
+      }
+
+      console.log('Creating dashboard for dataset:', dataset.name);
+      console.log('Dataset columns:', Object.keys(dataRows[0]));
+      console.log('Dataset rows:', dataRows.length);
+
+      // Analyze the dataset to create meaningful charts
+      const charts = await createChartsFromDataset(dataset);
+      
       const now = new Date();
       const sampleDashboard: Dashboard = {
         id: `dashboard_${Date.now()}`,
-        name: `Dashboard for ${dataSources[0].name}`,
-        description: 'Auto-generated dashboard from uploaded data',
-        charts: [
-          {
-            id: 'chart_1',
-            type: 'bar',
-            title: 'Data Overview',
-            datasetId: dataSources[0].id,
-            xColumn: 'Column1',
-            yColumn: 'Column2',
-            styling: {
-              colors: ['#2563EB', '#10B981', '#F59E0B'],
-              theme: 'light',
-              showLegend: true,
-              showGrid: true
-            }
-          }
-        ],
-        layout: [
-          { chartId: 'chart_1', x: 0, y: 0, width: 2, height: 1 }
-        ],
+        name: `${dataset.name} Analytics`,
+        description: `Auto-generated dashboard analyzing ${dataRows.length} records from ${dataset.name}`,
+        charts,
+        layout: charts.map((chart, index) => ({
+          chartId: chart.id,
+          x: index % 2,
+          y: Math.floor(index / 2),
+          width: 1,
+          height: 1
+        })),
         createdAt: now,
         updatedAt: now,
         isShared: false,
@@ -100,11 +113,200 @@ export default function DashboardScreen() {
 
       await dataService.saveDashboard(sampleDashboard);
       await loadDashboardData();
-      Alert.alert('Success', 'Sample dashboard created successfully!');
+      Alert.alert('Success', `Dashboard "${sampleDashboard.name}" created successfully with ${charts.length} charts!`);
     } catch (error) {
-      console.error('Failed to create sample dashboard:', error);
+      console.error('Failed to create dashboard:', error);
       Alert.alert('Error', 'Failed to create dashboard: ' + (error as Error).message);
     }
+  };
+
+  // Smart chart generation based on dataset analysis
+  const generateAIReport = async (dashboard: Dashboard) => {
+    setIsGeneratingReport(true);
+    
+    try {
+      // Check if Ollama is available
+      const isOllamaAvailable = await ollamaService.isAvailable();
+      
+      if (!isOllamaAvailable) {
+        Alert.alert(
+          'AI Service Unavailable', 
+          'Ollama with Mistral model not detected. Please ensure Ollama is running with: ollama run mistral'
+        );
+        return;
+      }
+
+      // Get the dataset for the dashboard
+      const datasets = await dataService.getDatasets();
+      const dataset = datasets.find(d => dashboard.charts.some(chart => chart.datasetId === d.id));
+      
+      if (!dataset) {
+        Alert.alert('Error', 'Could not find dataset for this dashboard.');
+        return;
+      }
+
+      // Prepare data for AI report generation
+      const dashboardData = {
+        name: dashboard.name,
+        chartCount: dashboard.charts.length,
+        datasetInfo: {
+          name: dataset.name,
+          rowCount: dataset.data.length,
+          columns: Object.keys(dataset.data[0] || {})
+        },
+        insights: dashboard.charts.map(chart => ({
+          title: chart.title,
+          content: `${chart.type.toUpperCase()} chart showing ${chart.xColumn} vs ${chart.yColumn}`
+        }))
+      };
+
+      const report = await ollamaService.generateDashboardReport(dashboardData);
+      
+      Alert.alert(
+        'AI Dashboard Report',
+        report,
+        [
+          {
+            text: 'Copy Report',
+            onPress: () => {
+              // In a real app, you'd use Clipboard API
+              console.log('Report copied:', report);
+            }
+          },
+          { text: 'OK' }
+        ]
+      );
+    } catch (error) {
+      console.error('Failed to generate AI report:', error);
+      Alert.alert('Error', 'Failed to generate AI report. Please try again.');
+    } finally {
+      setIsGeneratingReport(false);
+    }
+  };
+
+  // Smart chart generation based on dataset analysis
+  const createChartsFromDataset = async (dataset: Dataset) => {
+    const dataRows = dataset.data;
+    const columns = Object.keys(dataRows[0]);
+    const charts = [];
+
+    // Find numeric columns for visualizations
+    const numericColumns = columns.filter(col => {
+      const sampleValues = dataRows.slice(0, 10).map(row => row[col]);
+      return sampleValues.every(val => !isNaN(Number(val)) && val !== null && val !== '');
+    });
+
+    // Find categorical columns
+    const categoricalColumns = columns.filter(col => {
+      const uniqueValues = [...new Set(dataRows.map(row => row[col]))].length;
+      return uniqueValues < 20 && uniqueValues > 1; // Categories with reasonable number of unique values
+    });
+
+    console.log('Numeric columns:', numericColumns);
+    console.log('Categorical columns:', categoricalColumns);
+
+    // Chart 1: Distribution of first numeric column (if available)
+    if (numericColumns.length > 0) {
+      const column = numericColumns[0];
+      const values = dataRows.map(row => Number(row[column])).filter(val => !isNaN(val));
+      
+      // Create value ranges for histogram-like visualization
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const buckets = 5;
+      const bucketSize = (max - min) / buckets;
+      
+      const bucketData = Array(buckets).fill(0);
+      const bucketLabels = [];
+      
+      for (let i = 0; i < buckets; i++) {
+        const bucketMin = min + i * bucketSize;
+        const bucketMax = min + (i + 1) * bucketSize;
+        bucketLabels.push(`${bucketMin.toFixed(1)}-${bucketMax.toFixed(1)}`);
+        
+        bucketData[i] = values.filter(val => val >= bucketMin && (i === buckets - 1 ? val <= bucketMax : val < bucketMax)).length;
+      }
+
+      charts.push({
+        id: `chart_${charts.length + 1}`,
+        type: 'bar' as const,
+        title: `${column.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} Distribution`,
+        datasetId: dataset.id,
+        xColumn: column,
+        yColumn: 'count',
+        styling: {
+          colors: ['#2563EB', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
+          theme: 'light' as 'light',
+          showLegend: true,
+          showGrid: true
+        }
+      });
+    }
+
+    // Chart 2: Categorical distribution (if available)
+    if (categoricalColumns.length > 0) {
+      const column = categoricalColumns[0];
+  const valueCounts: Record<string, number> = {};
+      
+      dataRows.forEach(row => {
+        const value = row[column];
+        valueCounts[value] = (valueCounts[value] || 0) + 1;
+      });
+
+      charts.push({
+        id: `chart_${charts.length + 1}`,
+        type: 'pie' as const,
+        title: `${column.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} Breakdown`,
+        datasetId: dataset.id,
+        xColumn: column,
+        yColumn: 'count',
+        styling: {
+          colors: ['#2563EB', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
+          theme: 'light' as 'light',
+          showLegend: true,
+          showGrid: false
+        }
+      });
+    }
+
+    // Chart 3: Correlation between two numeric columns (if available)
+    if (numericColumns.length >= 2) {
+      charts.push({
+        id: `chart_${charts.length + 1}`,
+        type: 'scatter' as const,
+        title: `${numericColumns[0].replace(/_/g, ' ')} vs ${numericColumns[1].replace(/_/g, ' ')}`,
+        datasetId: dataset.id,
+        xColumn: numericColumns[0],
+        yColumn: numericColumns[1],
+        styling: {
+          colors: ['#2563EB'],
+          theme: 'light' as 'light',
+          showLegend: false,
+          showGrid: true
+        }
+      });
+    }
+
+    // Ensure we have at least one chart
+    if (charts.length === 0) {
+      // Create a basic overview chart using the first two columns
+      charts.push({
+        id: 'chart_1',
+        type: 'bar' as const,
+        title: 'Data Overview',
+        datasetId: dataset.id,
+        xColumn: columns[0],
+        yColumn: columns[1] || columns[0],
+        styling: {
+          colors: ['#2563EB', '#10B981', '#F59E0B'],
+          theme: 'light' as 'light',
+          showLegend: true,
+          showGrid: true
+        }
+      });
+    }
+
+    return charts;
   };
 
   const viewDashboard = (dashboard: Dashboard) => {
@@ -288,6 +490,20 @@ export default function DashboardScreen() {
                           }}
                         >
                           <Ionicons name="share-outline" size={18} color={theme.colors.textSecondary} />
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                          style={[styles.actionButton, isGeneratingReport && styles.disabledButton]} 
+                          onPress={(e) => {
+                            e.stopPropagation();
+                            generateAIReport(dashboard);
+                          }}
+                          disabled={isGeneratingReport}
+                        >
+                          <Ionicons 
+                            name={isGeneratingReport ? "hourglass-outline" : "document-text-outline"} 
+                            size={18} 
+                            color={isGeneratingReport ? theme.colors.textSecondary : theme.colors.primary} 
+                          />
                         </TouchableOpacity>
                       </View>
                     </TouchableOpacity>
@@ -542,5 +758,8 @@ const styles = StyleSheet.create({
   },
   createButton: {
     paddingHorizontal: 16,
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
 });

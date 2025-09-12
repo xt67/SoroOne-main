@@ -42,7 +42,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onAnimationEnd }) =>
   }, []);
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: '#FFFFFF' }]}>
       <Animated.View 
         style={[
           styles.content,
@@ -52,7 +52,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onAnimationEnd }) =>
           },
         ]}
       >
-        <Logo size="large" showText={false} />
+        <Logo size="large" showText={true} />
       </Animated.View>
     </View>
   );

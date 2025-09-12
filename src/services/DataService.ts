@@ -357,13 +357,13 @@ class DataService {
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
-        insight.id,
-        insight.question,
-        insight.answer,
-        insight.confidence,
-        insight.datasetId,
-        JSON.stringify(insight.chartRecommendations),
-        insight.createdAt.getTime(),
+        insight.id || '',
+        insight.question || '',
+        insight.answer || '',
+        insight.confidence || 0,
+        insight.datasetId || '',
+        JSON.stringify(insight.chartRecommendations || []),
+        insight.createdAt ? insight.createdAt.getTime() : Date.now(),
         insight.isBookmarked ? 1 : 0,
       ]
     );

@@ -41,9 +41,9 @@ export const Chart: React.FC<ChartProps> = ({
         return (
           <LineChart
             data={{
-              labels: data.labels,
+              labels: data.labels || [],
               datasets: [{
-                data: data.values,
+                data: data.values || [],
                 color: (opacity = 1) => `rgba(37, 99, 235, ${opacity})`,
                 strokeWidth: 2,
               }],
@@ -60,9 +60,9 @@ export const Chart: React.FC<ChartProps> = ({
         return (
           <BarChart
             data={{
-              labels: data.labels,
+              labels: data.labels || [],
               datasets: [{
-                data: data.values,
+                data: data.values || [],
               }],
             }}
             width={screenWidth - 40}
@@ -78,9 +78,9 @@ export const Chart: React.FC<ChartProps> = ({
       case 'pie':
         return (
           <PieChart
-            data={data.labels.map((label: string, index: number) => ({
+            data={(data.labels || []).map((label: string, index: number) => ({
               name: label,
-              population: data.values[index],
+              population: (data.values || [])[index] || 0,
               color: theme.colors.chart[index % theme.colors.chart.length],
               legendFontColor: theme.colors.textPrimary,
               legendFontSize: 12,

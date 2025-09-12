@@ -68,9 +68,13 @@ export type ChartType =
   | 'radar';
 
 export interface ChartData {
-  labels: string[];
-  values: number[];
+  id?: string;
+  title?: string;
+  type?: ChartType;
+  labels?: string[];
+  values?: number[];
   colors?: string[];
+  data?: any[];
 }
 
 export interface ChartConfig {
@@ -131,13 +135,17 @@ export interface SQLQuery {
 
 export interface AIInsight {
   id: string;
-  question: string;
-  answer: string;
+  title?: string;
+  question?: string;
+  answer?: string;
+  content?: string;
+  type?: 'summary' | 'correlation' | 'trend' | 'recommendation' | 'prediction';
+  category?: string;
   confidence: number;
-  datasetId: string;
-  chartRecommendations: ChartType[];
-  createdAt: Date;
-  isBookmarked: boolean;
+  datasetId?: string;
+  chartRecommendations?: ChartType[];
+  createdAt?: Date;
+  isBookmarked?: boolean;
 }
 
 export interface User {

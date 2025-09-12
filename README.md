@@ -1,13 +1,31 @@
-# 📊 SoroOne - Data Analytics & Visualization
+# 📊 SoroOne - AI-Powered Data Analytics & Visualization
 
-[![Expo SDK](https://img.shields.io/badge/Expo-SDK%2053-000020.svg?style=flat&logo=expo)](https://expo.dev/)
-[![React Native](https://img.shields.io/badge/React%20Native-0.75-61DAFB.svg?style=flat&logo=react)](https://reactnative.dev/)
+[![Expo SDK](https://img.shields.io/badge/Expo-SDK%2053-000020.svg?style=flat&logo=expo)](https://expo.## 🛠️ Technology Stack
+
+### Core Technologies
+- **Framework**: React Native 0.79.5 with Expo SDK 53
+- **Language**: TypeScript 5.x with strict mode
+- **Navigation**: React Navigation 6 with tab-based structure
+- **State Management**: React Context + AsyncStorage for persistence
+- **Charts**: React Native Chart Kit + Victory Native for visualizations
+
+### AI & Data Processing
+- **Local AI**: Ollama with Mistral 7B model for privacy-focused analysis
+- **Data Storage**: SQLite for datasets, AsyncStorage for preferences
+- **File Processing**: XLSX.js for Excel, Papa Parse for CSV
+- **Network**: Platform-aware configuration with diagnostics
+
+### Development Tools
+- **Build System**: Expo Application Services (EAS)
+- **Testing**: Jest + React Native Testing Library
+- **Code Quality**: ESLint + Prettier with TypeScript strict mode
+- **Bundling**: Metro bundler with custom configurationve](https://img.shields.io/badge/React%20Native-0.79.5-61DAFB.svg?style=flat&logo=react)](https://reactnative.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6.svg?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE.txt)
 
-A powerful and intuitive React Native mobile application for data visualization and analytics. Transform your Excel, CSV, and SQL data into beautiful, interactive dashboards with AI-powered insights.
+A powerful React Native mobile application for data visualization and analytics with **integrated local AI capabilities**. Transform your Excel, CSV, and SQL data into beautiful, interactive dashboards while leveraging **Ollama Mistral AI** for intelligent insights and natural language data analysis.
 
-> **🎯 Perfect for data analysts, business professionals, and students who need powerful data visualization on the go!**
+> **🤖 Features local AI processing with Ollama Mistral for privacy-focused data analysis!**
 
 ## ✨ Key Features
 
@@ -15,27 +33,36 @@ A powerful and intuitive React Native mobile application for data visualization 
 - **Multi-format Support**: Excel (.xlsx, .xls), CSV, and SQL files
 - **Local Processing**: All data processed securely on your device
 - **Large File Support**: Handle substantial datasets efficiently
+- **Real-time Data Preview**: Instant data visualization during import
 
-### 📊 **Visualization & Analytics**
-- **Interactive Dashboards**: Touch-friendly, responsive charts and graphs
-- **Multiple Chart Types**: Bar, line, pie, scatter, and more
+### 📊 **Interactive Dashboards**
+- **Smart Chart Generation**: Automatic chart type selection based on data
+- **Touch-friendly Interface**: Zoom, pan, and interact with visualizations
+- **Multiple Chart Types**: Bar, line, pie, scatter plots, and more
 - **Real-time Updates**: Dynamic data visualization as you explore
+- **Export & Share**: Save dashboards and export visualizations
 
-### 🤖 **AI-Powered Insights**
+### 🤖 **AI-Powered Analytics (Ollama Mistral)**
+- **Local AI Processing**: Privacy-first AI using Ollama Mistral model
+- **ChatGPT-style Interface**: Natural conversation about your data
+- **Intelligent Insights**: AI-generated analysis and recommendations
 - **Natural Language Queries**: Ask questions about your data in plain English
-- **Automated Analysis**: Get instant insights and recommendations
-- **Smart Suggestions**: AI-driven data exploration tips
+- **Report Generation**: AI-powered dashboard summaries and insights
+- **Trend Analysis**: Automated pattern detection and forecasting
 
-### 🛠️ **Professional Tools**
-- **SQL Query Editor**: Built-in editor with syntax highlighting and autocomplete
-- **Data Export**: Share visualizations and processed data
-- **Custom Dashboards**: Create and save personalized dashboard layouts
+### 🛠️ **Professional SQL Editor**
+- **Syntax Highlighting**: Full SQL syntax highlighting and formatting
+- **Query Execution**: Run SQL queries against imported datasets
+- **Interactive Results**: Browse and analyze query results
+- **Query History**: Save and reuse favorite queries
+- **SQLite Integration**: Built-in database for complex data operations
 
-### 🎨 **User Experience**
-- **6 Beautiful Color Schemes**: Default, Ocean, Forest, Sunset, Purple, and Monochrome
-- **Light/Dark Mode**: Automatic theme switching with system preferences
-- **Responsive Design**: Optimized for all screen sizes
-- **Accessibility**: Full accessibility support for all users
+### 🎨 **Modern User Experience**
+- **6 Beautiful Themes**: Default, Ocean, Forest, Sunset, Purple, and Monochrome
+- **Dark/Light Mode**: Automatic theme switching with system preferences
+- **Chart-based Logo**: Modern, data-focused branding
+- **Responsive Design**: Optimized for all screen sizes and orientations
+- **Accessibility**: Full accessibility support with screen readers
 
 ## 🚀 Quick Start
 
@@ -45,6 +72,21 @@ A powerful and intuitive React Native mobile application for data visualization 
 - **npm** or **yarn** package manager
 - **Expo CLI** (`npm install -g @expo/cli`)
 - **Expo Go app** on your mobile device ([iOS](https://apps.apple.com/app/expo-go/id982107779) | [Android](https://play.google.com/store/apps/details?id=host.exp.exponent))
+- **Ollama** (optional, for AI features): [Install Ollama](https://ollama.ai/)
+
+### 🤖 AI Setup (Optional)
+
+For AI-powered insights, install and run Ollama with Mistral:
+
+```bash
+# Install Ollama (follow instructions at https://ollama.ai/)
+ollama pull mistral
+
+# Start Ollama server (required for AI features)
+ollama serve
+```
+
+**Note**: AI features work on web platform. Mobile devices will show diagnostic information and network troubleshooting tools.
 
 ### Installation & Setup
 
@@ -56,7 +98,7 @@ cd SoroOne-main
 
 2. **Install dependencies**:
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
 
 3. **Start the development server**:
@@ -68,7 +110,7 @@ npm start
    - **Mobile**: Scan the QR code with Expo Go app
    - **iOS Simulator**: Press `i` in the terminal
    - **Android Emulator**: Press `a` in the terminal  
-   - **Web Browser**: Press `w` in the terminal
+   - **Web Browser**: Press `w` in the terminal (required for AI features)
 
 ### 🔧 Development Commands
 
@@ -89,15 +131,22 @@ src/
 │   ├── AboutModal.tsx      # App information modal
 │   ├── ColorSchemeModal.tsx # Theme selector
 │   ├── Chart.tsx          # Data visualization component
+│   ├── DashboardViewer.tsx # Interactive dashboard display
+│   ├── SplashScreen.tsx   # App startup screen with chart logo
+│   ├── Logo.tsx           # Chart-based logo component
 │   └── ...
 ├── screens/            # Main application screens
-│   ├── DashboardScreen.tsx    # Main dashboard interface
-│   ├── DataInputScreen.tsx    # Data import screen
-│   ├── SQLEditorScreen.tsx    # SQL query interface
-│   ├── AIInsightsScreen.tsx   # AI analytics screen
-│   └── SettingsScreen.tsx     # App settings & preferences
+│   ├── DashboardScreen.tsx    # Main dashboard with AI report generation
+│   ├── DataInputScreen.tsx    # Data import and file management
+│   ├── SQLEditorScreen.tsx    # SQL query interface with syntax highlighting
+│   ├── AIInsightsScreen.tsx   # ChatGPT-style AI chat interface
+│   └── SettingsScreen.tsx     # App settings & theme preferences
 ├── navigation/         # App navigation setup
 │   └── AppNavigator.tsx
+├── services/          # Business logic & data services
+│   ├── DataService.ts      # Core data processing and storage
+│   ├── OllamaService.ts    # Local AI integration with Mistral
+│   └── NetworkConfig.ts    # Network diagnostics and configuration
 ├── services/          # Business logic & data services
 │   └── DataService.ts
 ├── styles/           # Theme system & styling
@@ -151,28 +200,35 @@ The app includes 6 professionally designed color schemes:
 ## 📊 Features Deep Dive
 
 ### 🔍 **Data Import**
-- Drag & drop file interface
-- Support for large datasets (up to 50MB)
-- Automatic data type detection
-- Preview before import
+- **File Support**: Excel, CSV, SQL files with automatic format detection
+- **Data Preview**: Real-time preview with column analysis
+- **Large Datasets**: Efficient handling of files up to 50MB
+- **Data Validation**: Automatic type detection and quality assessment
 
-### 📈 **Visualization Engine**
-- 15+ chart types available
-- Interactive touch gestures (zoom, pan, select)
-- Export charts as images
-- Customizable styling options
+### 📈 **Dashboard & Visualization**
+- **Smart Charts**: AI-recommended chart types based on data characteristics
+- **Interactive Controls**: Touch gestures for zoom, pan, selection
+- **Real-time Analysis**: Live updates as you filter and explore data
+- **Export Options**: Save charts as images, export data to various formats
 
-### 🤖 **AI Analytics**
-- Natural language query processing
-- Automated trend detection
-- Statistical insights generation
-- Recommendation engine
+### 🤖 **AI-Powered Analysis**
+- **Local Processing**: Ollama Mistral runs entirely on your machine
+- **Chat Interface**: Natural conversation about your data (ChatGPT-style)
+- **Intelligent Reports**: AI-generated dashboard summaries and insights
+- **Pattern Recognition**: Automatic trend detection and anomaly identification
+- **Privacy-First**: All AI processing happens locally, data never leaves your device
 
-### ⚙️ **Settings & Customization**
-- Theme preferences with persistence
-- Data privacy controls
-- Export/import app settings
-- Accessibility options
+### 💻 **SQL Editor**
+- **Full SQL Support**: Complete SQL syntax with highlighting
+- **Interactive Execution**: Run queries and browse results instantly
+- **Query Management**: Save, organize, and reuse favorite queries
+- **Database Integration**: Direct SQLite database operations
+
+### 🎨 **User Interface**
+- **Modern Design**: Clean, chart-focused branding and interface
+- **Theme System**: 6 professional color schemes with dark/light mode
+- **Responsive Layout**: Optimized for phones, tablets, and web browsers
+- **Accessibility**: Full screen reader support and keyboard navigation
 
 ## 🎯 Target Audience
 
@@ -190,19 +246,45 @@ The app includes 6 professionally designed color schemes:
 - Project data visualization
 - Educational data science projects
 
-## 🚀 Roadmap
+## 🚀 Roadmap & Future Enhancements
 
-### 📅 **Version 1.2.0** (Coming Soon)
-- [ ] Advanced chart customization
-- [ ] Data collaboration features
-- [ ] Enhanced AI insights
-- [ ] Cloud data sync (optional)
+### 📅 **Version 1.2.0** (Next Release)
+- [ ] **Enhanced AI Features**
+  - Multi-model support (GPT, Claude, local models)
+  - Voice-to-text data queries
+  - Advanced statistical analysis
+- [ ] **Dashboard Improvements**
+  - Custom dashboard templates
+  - Advanced chart customization
+  - Interactive drill-down capabilities
+- [ ] **Collaboration Features**
+  - Dashboard sharing and export
+  - Team workspaces (optional cloud sync)
+  - Real-time collaborative analysis
 
 ### 📅 **Version 1.3.0** (Future)
-- [ ] Real-time data streaming
-- [ ] Advanced statistical functions
-- [ ] Custom dashboard templates
-- [ ] API integrations
+- [ ] **Data Connectivity**
+  - Database connectors (PostgreSQL, MySQL, MongoDB)
+  - API data source integration
+  - Real-time data streaming
+- [ ] **Advanced Analytics**
+  - Machine learning model integration
+  - Predictive analytics and forecasting
+  - Custom statistical functions
+- [ ] **Enterprise Features**
+  - Single sign-on (SSO) support
+  - Advanced security and compliance
+  - Custom branding and white-labeling
+
+### 📅 **Long-term Vision**
+- [ ] **Platform Expansion**
+  - Desktop application (Electron)
+  - Browser extension for quick analysis
+  - API for third-party integrations
+- [ ] **AI Advancements**
+  - Fine-tuned models for specific industries
+  - Automated report generation
+  - Natural language data transformation
 
 ## 🤝 Contributing
 
@@ -227,10 +309,12 @@ This project is licensed under the MIT License - see the [LICENSE.txt](./LICENSE
 
 ## 🔒 Privacy & Security
 
-- **Local Processing**: All data is processed locally on your device
-- **No Cloud Storage**: Your sensitive data never leaves your device
-- **Privacy Policy**: See [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) for full details
-- **Security**: Regular security audits and updates
+- **Local-First Processing**: All data analysis happens on your device
+- **AI Privacy**: Ollama Mistral runs completely offline - no data sent to external servers
+- **No Cloud Dependencies**: Your sensitive data never leaves your device unless you choose to export
+- **Open Source**: Full transparency with open-source codebase
+- **Privacy Policy**: Comprehensive privacy documentation in [PRIVACY_POLICY.md](./PRIVACY_POLICY.md)
+- **Data Control**: You own and control all your data and insights
 
 ## 📞 Support & Contact
 

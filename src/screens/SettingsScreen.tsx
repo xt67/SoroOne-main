@@ -15,7 +15,21 @@ export default function SettingsScreen() {
   const [showAboutModal, setShowAboutModal] = useState(false);
 
   const handleThemeToggle = (value: boolean) => {
+    // Toggle between light and dark mode explicitly
     setThemeMode(value ? 'dark' : 'light');
+  };
+
+  const getThemeModeText = () => {
+    switch (themeMode) {
+      case 'dark':
+        return 'Dark mode is enabled';
+      case 'light':
+        return 'Light mode is enabled';
+      case 'auto':
+        return `Auto mode (currently ${isDark ? 'dark' : 'light'})`;
+      default:
+        return 'Switch to dark theme for better viewing in low light';
+    }
   };
 
   const openColorSchemeModal = () => {
@@ -207,23 +221,33 @@ Thank you for creating this amazing app!`);
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: theme.colors.textPrimary }]}>Appearance</Text>
           
-          <View style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}>
+          <TouchableOpacity 
+            style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}
+            onPress={() => {
+              // Cycle through theme modes: light -> dark -> auto -> light
+              const nextMode = themeMode === 'light' ? 'dark' : themeMode === 'dark' ? 'auto' : 'light';
+              setThemeMode(nextMode);
+            }}
+          >
             <View style={styles.settingLeft}>
-              <Ionicons name="moon-outline" size={24} color={theme.colors.primary} />
+              <Ionicons 
+                name={themeMode === 'auto' ? "contrast-outline" : themeMode === 'dark' ? "moon" : "sunny"} 
+                size={24} 
+                color={theme.colors.primary} 
+              />
               <View style={styles.settingText}>
-                <Text style={[styles.settingTitle, { color: theme.colors.textPrimary }]}>Dark Mode</Text>
+                <Text style={[styles.settingTitle, { color: theme.colors.textPrimary }]}>Theme Mode</Text>
                 <Text style={[styles.settingDescription, { color: theme.colors.textSecondary }]}>
-                  Switch to dark theme for better viewing in low light
+                  {getThemeModeText()}
                 </Text>
               </View>
             </View>
-            <Switch
-              value={isDark}
-              onValueChange={handleThemeToggle}
-              trackColor={{ false: '#E5E7EB', true: theme.colors.primary }}
-              thumbColor={isDark ? '#FFFFFF' : '#FFFFFF'}
-            />
-          </View>
+            <View style={[styles.themeModeIndicator, { backgroundColor: theme.colors.primary }]}>
+              <Text style={[styles.themeModeText, { color: '#FFFFFF' }]}>
+                {themeMode.toUpperCase()}
+              </Text>
+            </View>
+          </TouchableOpacity>
 
           <TouchableOpacity style={[styles.settingItem, { backgroundColor: theme.colors.surface }]} onPress={openColorSchemeModal}>
             <View style={styles.settingLeft}>
@@ -386,5 +410,16 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
+  },
+  themeModeIndicator: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    minWidth: 60,
+    alignItems: 'center',
+  },
+  themeModeText: {
+    fontSize: 12,
+    fontWeight: '600',
   },
 });

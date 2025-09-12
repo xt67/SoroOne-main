@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../styles/ThemeProvider';
 import { Chart } from './Chart';
-import type { Dashboard } from '../types';
+import { dataService } from '../services/DataService';
+import type { Dashboard, Dataset, ChartData } from '../types';
 
 interface DashboardViewerProps {
   visible: boolean;
@@ -19,6 +20,114 @@ export const DashboardViewer: React.FC<DashboardViewerProps> = ({
   onClose,
 }) => {
   const { theme } = useTheme();
+  const [chartDataCache, setChartDataCache] = useState<Record<string, ChartData>>({});
+
+  useEffect(() => {
+    if (dashboard && visible) {
+      loadChartData();
+    }
+  }, [dashboard, visible]);
+
+  const loadChartData = async () => {
+    if (!dashboard) return;
+
+    const cache: Record<string, ChartData> = {};
+    
+    for (const chart of dashboard.charts) {
+      try {
+        const datasets = await dataService.getDatasets();
+        const dataset = datasets.find(d => d.id === chart.datasetId);
+        
+        if (dataset && dataset.data.length > 0) {
+          const chartData = generateChartData(chart, dataset);
+          cache[chart.id] = chartData;
+        } else {
+          // Fallback to sample data if dataset not found
+          cache[chart.id] = {
+            labels: ['No Data'],
+            values: [0],
+            colors: chart.styling.colors
+          };
+        }
+      } catch (error) {
+        console.error('Failed to load chart data:', error);
+        cache[chart.id] = {
+          labels: ['Error'],
+          values: [0],
+          colors: ['#EF4444']
+        };
+      }
+    }
+    
+    setChartDataCache(cache);
+  };
+
+  const generateChartData = (chart: any, dataset: Dataset): ChartData => {
+    const dataRows = dataset.data;
+    
+    if (chart.type === 'pie') {
+      // For pie charts, count occurrences of each value in the xColumn
+      const valueCounts: Record<string, number> = {};
+      dataRows.forEach(row => {
+        const value = String(row[chart.xColumn] || 'Unknown');
+        valueCounts[value] = (valueCounts[value] || 0) + 1;
+      });
+      
+      return {
+        labels: Object.keys(valueCounts),
+        values: Object.values(valueCounts),
+        colors: chart.styling.colors
+      };
+    } else if (chart.type === 'bar') {
+      // For bar charts with numeric data, create distribution
+      const values = dataRows.map(row => Number(row[chart.xColumn])).filter(val => !isNaN(val));
+      
+      if (values.length === 0) {
+        return { labels: ['No Data'], values: [0], colors: chart.styling.colors };
+      }
+      
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const buckets = Math.min(5, Math.max(3, Math.floor(values.length / 10)));
+      const bucketSize = (max - min) / buckets;
+      
+      const bucketData = Array(buckets).fill(0);
+      const bucketLabels = [];
+      
+      for (let i = 0; i < buckets; i++) {
+        const bucketMin = min + i * bucketSize;
+        const bucketMax = min + (i + 1) * bucketSize;
+        bucketLabels.push(`${bucketMin.toFixed(1)}-${bucketMax.toFixed(1)}`);
+        
+        bucketData[i] = values.filter(val => 
+          val >= bucketMin && (i === buckets - 1 ? val <= bucketMax : val < bucketMax)
+        ).length;
+      }
+      
+      return {
+        labels: bucketLabels,
+        values: bucketData,
+        colors: chart.styling.colors
+      };
+    } else if (chart.type === 'scatter' || chart.type === 'line') {
+      // For scatter/line charts, use first 10 data points
+      const xValues = dataRows.slice(0, 10).map(row => Number(row[chart.xColumn])).filter(val => !isNaN(val));
+      const yValues = dataRows.slice(0, 10).map(row => Number(row[chart.yColumn])).filter(val => !isNaN(val));
+      
+      return {
+        labels: xValues.map((_, index) => `Point ${index + 1}`),
+        values: yValues.length > 0 ? yValues : [0],
+        colors: chart.styling.colors
+      };
+    }
+    
+    // Default fallback
+    return {
+      labels: ['Data'],
+      values: [dataRows.length],
+      colors: chart.styling.colors
+    };
+  };
 
   if (!dashboard) return null;
 
@@ -92,9 +201,9 @@ export const DashboardViewer: React.FC<DashboardViewerProps> = ({
                   <View style={styles.chartContent}>
                     <Chart
                       type={chart.type}
-                      data={{
-                        labels: ['Sample 1', 'Sample 2', 'Sample 3', 'Sample 4'],
-                        values: [30, 45, 25, 60],
+                      data={chartDataCache[chart.id] || {
+                        labels: ['Loading...'],
+                        values: [0],
                         colors: chart.styling.colors
                       }}
                       height={200}

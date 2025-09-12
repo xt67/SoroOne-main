@@ -2,11 +2,11 @@
   "expo": {
     "name": "SoroOne",
     "slug": "soroone-main",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
+    "description": "AI-powered data analytics and visualization app with local Ollama Mistral integration for privacy-focused insights.",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -29,8 +29,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "388d347a-b4c8-428d-aef5-ebf10b97dacc"
+        "projectId": "your-project-id"
       }
-    }
+    },
+    "owner": "your-username"
   }
 }

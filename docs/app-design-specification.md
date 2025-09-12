@@ -3,22 +3,22 @@
 ## 1. Executive Summary
 
 **Project Name:** SoroOne  
-**Platform:** Cross-platform Mobile Application (iOS/Android)  
-**Framework:** React Native with Expo  
+**Platform:** Cross-platform Mobile Application (iOS/Android/Web)  
+**Framework:** React Native 0.79.5 with Expo SDK 53  
 **Target Audience:** Data analysts, business professionals, and students  
-**Primary Goal:** Provide an intuitive, all-in-one platform for data visualization, analysis, and insights generation
+**Primary Goal:** Provide an AI-powered, privacy-focused platform for data visualization, analysis, and insights generation
 
 ## 2. App Overview
 
-SoroOne is a comprehensive mobile application that transforms raw data from Excel, CSV, and SQL files into interactive dashboards and actionable insights. The app leverages open-source AI models to provide intelligent chart generation, data analysis, and question-answering capabilities.
+SoroOne is a comprehensive mobile application that transforms raw data from Excel, CSV, and SQL files into interactive dashboards and actionable insights. The app leverages **Ollama Mistral AI** for local, privacy-focused intelligent analysis, chart generation, and natural language data interaction.
 
 ### 2.1 Core Value Proposition
+- **Local AI Integration:** Ollama Mistral for privacy-first AI analysis
+- **ChatGPT-style Interface:** Natural conversation about your data
 - **Unified Platform:** All data analysis tools in one mobile app
-- **AI-Powered Insights:** Automated chart generation and data interpretation
-- **Cross-Format Support:** Handle Excel, CSV, and SQL data seamlessly
-- **Interactive Dashboards:** Touch-friendly, responsive visualizations
-- **Offline Capability:** Work with data without internet connection
-- **Collaborative Features:** Easy sharing and export options
+- **Privacy-First:** All processing happens locally, no data leaves your device
+- **Cross-Platform:** Works on mobile, tablet, and web browsers
+- **Real-time Insights:** Instant AI-powered analysis and recommendations
 
 ## 3. Feature Specifications
 
@@ -79,25 +79,37 @@ SoroOne is a comprehensive mobile application that transforms raw data from Exce
 - Visual query builder for beginners
 - Performance metrics and execution plans
 
-### 3.4 AI Insights & Question Answering
-#### 3.4.1 Automated Insights
-- Statistical analysis and pattern detection
-- Trend identification and forecasting
-- Anomaly detection and alerts
-- Correlation analysis between variables
-- Seasonal pattern recognition
+### 3.4 AI Insights & Conversational Analytics (Ollama Mistral)
 
-#### 3.4.2 Natural Language Processing
-- Question answering in natural language
-- Voice-to-text query input
-- Insight explanations in plain English
-- Recommended questions based on data
-- Context-aware responses
+#### 3.4.1 Local AI Integration
+- **Ollama Mistral Integration**: Local AI model running on user's machine
+- **Privacy-First Processing**: All AI analysis happens offline
+- **Platform Support**: Web browser for full AI features, mobile with diagnostics
+- **Network Configuration**: Automatic detection and setup assistance
+- **Performance Optimization**: Efficient local model execution
 
-#### 3.4.3 AI Model Integration
-- Integration with open-source models (Hugging Face)
-- Local processing for data privacy
-- Offline AI capabilities
+#### 3.4.2 ChatGPT-style Interface
+- **Conversational UI**: Chat-based interaction with clean, modern design
+- **Natural Language Queries**: Ask questions about data in plain English
+- **Suggested Questions**: Smart prompts based on available data
+- **Message History**: Persistent conversation history
+- **Real-time Responses**: Streaming AI responses for better UX
+- **Context Awareness**: AI understands current dataset and previous questions
+
+#### 3.4.3 AI-Powered Analysis
+- **Dataset Analysis**: Automatic statistical analysis and pattern detection
+- **Trend Identification**: AI-powered trend analysis and forecasting
+- **Correlation Detection**: Identify relationships between data variables
+- **Insight Generation**: Automated insights and recommendations
+- **Report Generation**: AI-created dashboard summaries and findings
+- **Question Suggestions**: Smart follow-up questions based on analysis
+
+#### 3.4.4 Network Diagnostics & Setup
+- **Connection Testing**: Automatic Ollama server detection
+- **Troubleshooting Tools**: Network diagnostics and setup assistance
+- **Platform Detection**: Automatic configuration based on device type
+- **Firewall Guidance**: Help users configure network access
+- **Performance Monitoring**: Track AI response times and optimization
 - Custom model training options
 
 ### 3.5 Sharing & Collaboration
@@ -150,36 +162,35 @@ SoroOne is a comprehensive mobile application that transforms raw data from Exce
 ### 4.4 Navigation Structure
 #### 4.4.1 Bottom Tab Navigation
 1. **Dashboard** (Home icon)
-   - Main dashboard view
-   - Quick insights panel
-   - Recent files access
+   - Interactive dashboard viewer
+   - AI-generated report summaries
+   - Dataset overview and statistics
 
 2. **Data Input** (Upload icon)
-   - File import interface
-   - Data source connections
-   - Sample datasets
+   - File import interface (Excel, CSV, SQL)
+   - Data preview and validation
+   - Sample datasets for testing
 
 3. **SQL Editor** (Code icon)
-   - Query writing interface
-   - Saved queries
-   - Query templates
+   - Full SQL editor with syntax highlighting
+   - Query execution and results
+   - Saved queries and templates
 
 4. **AI Insights** (Brain icon)
-   - Question answering interface
-   - Automated insights
-   - Trend analysis
+   - ChatGPT-style conversational interface
+   - Natural language data queries
+   - AI-powered analysis and insights
 
 5. **Settings** (Gear icon)
-   - App preferences
-   - Theme selection
-   - Account management
+   - Theme selection (6 color schemes)
+   - App preferences and configuration
+   - About modal and help resources
 
-#### 4.4.2 Header Navigation
-- App logo and title
-- Theme toggle (Light/Dark)
-- Share button (context-dependent)
-- Search functionality
-- User profile access
+#### 4.4.2 App Branding
+- **Logo:** Chart-based logo design representing data visualization
+- **Splash Screen:** Modern chart logo with "SoroOne" branding
+- **App Name:** SoroOne (replacing previous "Data Analytics" text)
+- **Icon Design:** Professional data-focused iconography
 
 ### 4.5 Screen Specifications
 
@@ -231,23 +242,30 @@ SoroOne is a comprehensive mobile application that transforms raw data from Exce
   - Result count and execution time
   - Export options
 
-#### 4.5.4 AI Insights Screen
-- **Question Input:**
-  - Text input with suggestions
-  - Voice input button
-  - Predefined question templates
-  
-- **Insights Display:**
-  - Card-based layout for insights
-  - Visual indicators for importance
-  - Expandable detailed explanations
-  
-- **History Section:**
-  - Previous questions and answers
-  - Bookmarked insights
-  - Search functionality
+#### 4.5.4 AI Insights Screen (ChatGPT-style Interface)
+- **Chat Interface:**
+  - Clean, conversation-focused design
+  - Message bubbles for user and AI responses
+  - Typing indicators during AI processing
+  - Timestamp and status information
 
-#### 4.5.5 Settings Screen
+- **Input Section:**
+  - Text input with send button
+  - Suggested questions based on available data
+  - Voice input capability (future enhancement)
+  - Quick action buttons for common queries
+
+- **AI Integration Panel:**
+  - Ollama connection status indicator
+  - Network diagnostics and troubleshooting
+  - AI model information and capabilities
+  - Performance metrics and response times
+
+- **Data Context Panel:**
+  - Current dataset information
+  - Available data columns and types
+  - Data summary statistics
+  - Quick data preview access#### 4.5.5 Settings Screen
 - **Appearance:**
   - Theme selection (Light/Dark/Auto)
   - Color scheme customization

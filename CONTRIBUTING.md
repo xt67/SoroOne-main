@@ -1,6 +1,6 @@
 # Contributing to SoroOne
 
-Thank you for your interest in contributing to SoroOne! We welcome contributions from developers of all skill levels.
+Thank you for your interest in contributing to SoroOne! We welcome contributions from developers of all skill levels. SoroOne is an AI-powered data analytics mobile app built with React Native and Expo, featuring local Ollama Mistral AI integration.
 
 ## 🚀 Getting Started
 
@@ -9,6 +9,7 @@ Thank you for your interest in contributing to SoroOne! We welcome contributions
 - npm or yarn
 - Git
 - Expo CLI (`npm install -g @expo/cli`)
+- Ollama (for AI features development): [Install Ollama](https://ollama.ai/)
 
 ### Setup Development Environment
 
@@ -24,12 +25,24 @@ Thank you for your interest in contributing to SoroOne! We welcome contributions
    ```
 4. **Install dependencies**:
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    ```
-5. **Start development server**:
+5. **Setup AI (Optional)**:
+   ```bash
+   # Install and start Ollama
+   ollama pull mistral
+   ollama serve
+   ```
+6. **Start development server**:
    ```bash
    npm start
    ```
+
+### Development Environment Notes
+- **Web Development**: Full AI features available when running on web (`w` in Expo CLI)
+- **Mobile Development**: AI diagnostics and network troubleshooting tools available
+- **Hot Reload**: Changes reflect immediately in development mode
+- **TypeScript**: All code should use TypeScript with strict mode enabled
 
 ## 📋 How to Contribute
 
@@ -130,11 +143,40 @@ docs: update installation instructions
 ```
 src/
 ├── components/     # Reusable UI components
+│   ├── DashboardViewer.tsx  # Interactive dashboard display
+│   ├── Chart.tsx           # Data visualization components
+│   ├── Logo.tsx            # Chart-based logo component
+│   └── SplashScreen.tsx    # App startup screen
 ├── screens/       # Screen components
-├── navigation/    # Navigation setup
-├── services/      # Business logic
+│   ├── DashboardScreen.tsx  # Main dashboard with AI reports
+│   ├── AIInsightsScreen.tsx # ChatGPT-style AI interface
+│   ├── SQLEditorScreen.tsx  # SQL editor with highlighting
+│   └── DataInputScreen.tsx  # File import and management
+├── services/      # Business logic and external integrations
+│   ├── DataService.ts       # Core data processing
+│   ├── OllamaService.ts     # Local AI integration
+│   └── NetworkConfig.ts     # Network diagnostics
+├── navigation/    # App navigation setup
+├── styles/        # Theme system and styling
 ├── utils/         # Helper functions
 ├── types/         # TypeScript definitions
+└── hooks/         # Custom React hooks
+```
+
+### AI Development Guidelines
+
+#### Ollama Integration
+- **Local Processing**: All AI must run locally via Ollama
+- **Privacy First**: No data should be sent to external services
+- **Platform Awareness**: Handle web vs mobile platform differences
+- **Error Handling**: Graceful degradation when AI is unavailable
+- **Performance**: Optimize for local model efficiency
+
+#### Testing AI Features
+1. **Setup**: Install Ollama and pull Mistral model
+2. **Web Testing**: Use `npm start` and press `w` for web browser
+3. **Mobile Testing**: Verify diagnostic tools work properly
+4. **Network Testing**: Test various network configurations
 ├── styles/        # Theme and styling
 └── hooks/         # Custom React hooks
 ```

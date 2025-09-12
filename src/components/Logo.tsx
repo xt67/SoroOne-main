@@ -9,20 +9,29 @@ interface LogoProps {
 
 export const Logo: React.FC<LogoProps> = ({ size = 'medium', showText = true }) => {
   const sizeStyles = {
-    small: { iconSize: 24, fontSize: 16 },
-    medium: { iconSize: 32, fontSize: 20 },
-    large: { iconSize: 48, fontSize: 28 },
+    small: { iconSize: 24, fontSize: 16, containerSize: 40 },
+    medium: { iconSize: 32, fontSize: 20, containerSize: 48 },
+    large: { iconSize: 48, fontSize: 28, containerSize: 64 },
   };
 
-  const { iconSize, fontSize } = sizeStyles[size];
+  const { iconSize, fontSize, containerSize } = sizeStyles[size];
 
   return (
     <View style={styles.container}>
-      <View style={[styles.logoContainer, { width: iconSize + 16, height: iconSize + 16 }]}>
-        <Ionicons name="analytics" size={iconSize} color="#FFFFFF" />
+      <View style={[
+        styles.logoContainer, 
+        { 
+          width: containerSize, 
+          height: containerSize,
+          backgroundColor: '#FFFFFF',
+          borderColor: '#E5E7EB',
+          borderWidth: 2,
+        }
+      ]}>
+        <Ionicons name="bar-chart" size={iconSize} color="#1F2937" />
       </View>
       {showText && (
-        <Text style={[styles.logoText, { fontSize }]}>
+        <Text style={[styles.logoText, { fontSize, color: '#1F2937' }]}>
           SoroOne
         </Text>
       )}
@@ -37,19 +46,17 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   logoContainer: {
-    backgroundColor: '#2563EB',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#2563EB',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 4,
   },
   logoText: {
     fontWeight: '700',
-    color: '#FFFFFF',
     letterSpacing: 0.5,
   },
 });
