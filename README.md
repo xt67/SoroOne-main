@@ -1,6 +1,16 @@
 # 📊 SoroOne - AI-Powered Data Analytics & Visualization
 
-[![Expo SDK](https://img.shields.io/badge/Expo-SDK%2053-000020.svg?style=flat&logo=expo)](https://expo.## 🛠️ Technology Stack
+[![Expo SDK](https://img.shields.io/badge/Expo-SDK%2053-000020.svg?style=flat&logo=expo)](https://expo.dev/)
+[![React Native](https://img.shields.io/badge/React%20Native-0.79.5-61DAFB.svg?style=flat&logo=react)](https://reactnative.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6.svg?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE.txt)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-September%202025-brightgreen.svg)](https://github.com/xt67/SoroOne-main)
+
+A powerful React Native mobile application for data visualization and analytics with **integrated local AI capabilities**. Transform your Excel, CSV, and SQL data into beautiful, interactive dashboards while leveraging **Ollama Mistral AI** for intelligent insights and natural language data analysis.
+
+> **🤖 Features local AI processing with Ollama Mistral for privacy-focused data analysis!**
+
+## 🛠️ Technology Stack
 
 ### Core Technologies
 - **Framework**: React Native 0.79.5 with Expo SDK 53
@@ -19,13 +29,7 @@
 - **Build System**: Expo Application Services (EAS)
 - **Testing**: Jest + React Native Testing Library
 - **Code Quality**: ESLint + Prettier with TypeScript strict mode
-- **Bundling**: Metro bundler with custom configurationve](https://img.shields.io/badge/React%20Native-0.79.5-61DAFB.svg?style=flat&logo=react)](https://reactnative.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6.svg?style=flat&logo=typescript)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE.txt)
-
-A powerful React Native mobile application for data visualization and analytics with **integrated local AI capabilities**. Transform your Excel, CSV, and SQL data into beautiful, interactive dashboards while leveraging **Ollama Mistral AI** for intelligent insights and natural language data analysis.
-
-> **🤖 Features local AI processing with Ollama Mistral for privacy-focused data analysis!**
+- **Bundling**: Metro bundler with custom configuration
 
 ## ✨ Key Features
 
