@@ -23,6 +23,9 @@
     "start:with-ollama": "concurrently \"npm run ollama:start\" \"npm run start\"",
     "start:dev": "node ./scripts/start-dev.js",
     "start:auto": "node ./scripts/start-dev.js",
+    "daily": "node scripts/daily-maintenance.js",
+    "daily:windows": "powershell -ExecutionPolicy Bypass -File ./daily-maintenance.ps1",
+    "contribute": "npm run daily",
     "ollama:start": "ollama serve",
     "ollama:pull": "ollama pull mistral",
     "ollama:setup": "npm run ollama:pull && echo Ollama setup complete!",
@@ -79,5 +82,9 @@
   },
   "jest": {
     "preset": "jest-expo"
+  },
+  "metadata": {
+    "lastUpdated": "2025-09-13T16:00:53.285Z",
+    "lastMaintenance": "2025-09-13"
   }
 }

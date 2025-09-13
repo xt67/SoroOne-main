@@ -4,7 +4,7 @@
 [![React Native](https://img.shields.io/badge/React%20Native-0.79.5-61DAFB.svg?style=flat&logo=react)](https://reactnative.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6.svg?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE.txt)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-September%202025-brightgreen.svg)](https://github.com/xt67/SoroOne-main)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-September%202025-brightgreen.svg)](https://github.com/xt67/SoroOne-main)(https://github.com/xt67/SoroOne-main)
 
 A powerful React Native mobile application for data visualization and analytics with **integrated local AI capabilities**. Transform your Excel, CSV, and SQL data into beautiful, interactive dashboards while leveraging **Ollama Mistral AI** for intelligent insights and natural language data analysis.
 
