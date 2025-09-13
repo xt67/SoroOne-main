@@ -27,6 +27,15 @@ npm run dev
 4. **Test Ollama connection** to verify it's working
 5. **Start Expo with tunnel mode** for mobile device access
 
+## Mobile AI Features
+
+For AI features to work on mobile devices:
+
+- **Desktop/Web**: AI features work directly via localhost
+- **Mobile devices**: Show diagnostic information and fallback messaging
+- **Tunnel mode**: Use `npx expo start --tunnel` for better mobile connectivity
+- **Proxy server**: Use `npm run proxy` if mobile needs additional network help
+
 ## Why is this needed?
 
 The issue you experienced is that Ollama's CORS configuration resets after every restart. These scripts ensure that:
@@ -34,6 +43,7 @@ The issue you experienced is that Ollama's CORS configuration resets after every
 - ✅ Ollama always starts with `OLLAMA_ORIGINS="*"` to allow cross-origin requests
 - ✅ Expo runs in tunnel mode so mobile devices can access localhost
 - ✅ Both services start in the correct order with proper configuration
+- ✅ Mobile devices get appropriate fallback behavior when Ollama isn't accessible
 
 ## Manual startup (if scripts don't work)
 

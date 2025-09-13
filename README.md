@@ -74,7 +74,26 @@ A powerful React Native mobile application for data visualization and analytics 
 - **Expo Go app** on your mobile device ([iOS](https://apps.apple.com/app/expo-go/id982107779) | [Android](https://play.google.com/store/apps/details?id=host.exp.exponent))
 - **Ollama** (optional, for AI features): [Install Ollama](https://ollama.ai/)
 
-### 🤖 AI Setup (Optional)
+### ⚡ Easy Start (Recommended)
+
+For the complete experience with AI features:
+
+**Windows PowerShell:**
+```powershell
+.\start-soroone.ps1
+```
+
+**Windows Command Prompt:**
+```cmd
+start-soroone.bat
+```
+
+**Cross-Platform:**
+```bash
+npm run dev  # Starts both Ollama and Expo automatically
+```
+
+### 🤖 Manual AI Setup (Alternative)
 
 For AI-powered insights, install and run Ollama with Mistral:
 
@@ -86,7 +105,7 @@ ollama pull mistral
 ollama serve
 ```
 
-**Note**: AI features work on web platform. Mobile devices will show diagnostic information and network troubleshooting tools.
+**Note**: AI features work best on web platform. Mobile devices show diagnostic information and may require tunnel mode for connectivity.
 
 ### Installation & Setup
 
@@ -115,13 +134,24 @@ npm start
 ### 🔧 Development Commands
 
 ```bash
-npm start          # Start Expo development server
+npm run dev        # Start both Ollama and Expo (recommended)
+npm start          # Start Expo development server only
+npm run dev:ollama # Start Ollama with CORS enabled
+npm run proxy      # Start proxy server for mobile tunnel
 npm run android    # Run on Android emulator
 npm run ios        # Run on iOS simulator
 npm run web        # Run in web browser
 npm test           # Run tests
 npm run lint       # Run ESLint
 ```
+
+### 📱 Mobile AI Connectivity
+
+For mobile devices to access AI features:
+
+1. **Use tunnel mode**: `npx expo start --tunnel`
+2. **Enable proxy** (if needed): `npm run proxy`
+3. **Check diagnostics** in the AI Insights screen for connection status
 
 ## 📱 App Structure & Architecture
 
