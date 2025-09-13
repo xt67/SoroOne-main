@@ -87,16 +87,16 @@ Device: [Your device information]
 
 Thank you!`);
       
-      const mailtoUrl = `mailto:support@soroone.app?subject=${subject}&body=${body}`;
+      const mailtoUrl = `mailto:ssoroone@gmail.com?subject=${subject}&body=${body}`;
       const canOpen = await Linking.canOpenURL(mailtoUrl);
       
       if (canOpen) {
         await Linking.openURL(mailtoUrl);
       } else {
-        Alert.alert('Email Not Available', 'Please email us at support@soroone.app');
+        Alert.alert('Email Not Available', 'Please email us at ssoroone@gmail.com');
       }
     } catch (error) {
-      Alert.alert('Error', 'Could not open email client. Please email us at support@soroone.app');
+      Alert.alert('Error', 'Could not open email client. Please email us at ssoroone@gmail.com');
     }
   };
 
@@ -208,10 +208,10 @@ App Version: 1.1.0
 
 Thank you for creating this amazing app!`);
       
-      const mailtoUrl = `mailto:feedback@soroone.app?subject=${subject}&body=${body}`;
+      const mailtoUrl = `mailto:ssoroone@gmail.com?subject=${subject}&body=${body}`;
       await Linking.openURL(mailtoUrl);
     } catch (error) {
-      Alert.alert('Error', 'Could not open email client. Please email us at feedback@soroone.app');
+      Alert.alert('Error', 'Could not open email client. Please email us at ssoroone@gmail.com');
     }
   };
 

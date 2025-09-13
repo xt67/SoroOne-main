@@ -28,29 +28,40 @@ class OllamaService {
   private config = getOllamaConfig();
 
   /**
-   * Check if we can use Ollama (disable on mobile for testing)
+   * Check if we can use Ollama (now enabled on all platforms)
    */
   private canUseOllama(): boolean {
-    return Platform.OS === 'web';
+    // Enable Ollama on all platforms for better mobile support
+    return true;
   }
 
   /**
-   * Check if Ollama server is running and model is available
+   * For Expo tunnel mode, we need to disable Ollama on mobile platforms
+   * since localhost is not accessible through the tunnel
    */
   async isAvailable(): Promise<boolean> {
     if (!this.canUseOllama()) {
-      console.log('Ollama disabled on mobile platform');
+      console.log('Ollama service disabled');
+      return false;
+    }
+
+    // For mobile platforms, check if we're in tunnel mode
+    if (Platform.OS === 'android' || Platform.OS === 'ios') {
+      // In tunnel mode, mobile devices can't access localhost
+      // We'll provide a graceful fallback
+      console.log('⚠️ Ollama not accessible on mobile through Expo tunnel');
+      console.log('💡 Use web version or development build for full AI features');
       return false;
     }
 
     try {
-      console.log('Checking Ollama availability...');
+      console.log('Checking Ollama availability on', Platform.OS, 'platform...');
       
       for (const url of this.config.baseUrls) {
         try {
           console.log(`Trying ${url}/api/tags`);
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 5000);
+          const timeoutId = setTimeout(() => controller.abort(), 10000); // Increased timeout to 10 seconds
           
           const response = await fetch(`${url}/api/tags`, {
             method: 'GET',
@@ -69,16 +80,23 @@ class OllamaService {
             );
             
             if (hasModel) {
-              console.log(`Ollama found at ${url} with ${this.config.model} model`);
+              console.log(`✅ Ollama connected at ${url} with ${this.config.model} model`);
               this.baseUrl = url; // Update base URL to working one
               return true;
             } else {
-              console.log(`Ollama found at ${url} but no ${this.config.model} model available`);
+              console.log(`⚠️ Ollama found at ${url} but no ${this.config.model} model available`);
               console.log('Available models:', data.models?.map((m: any) => m.name).join(', '));
             }
+          } else {
+            console.log(`❌ HTTP ${response.status} from ${url}`);
           }
         } catch (urlError) {
-          console.log(`Failed to connect to ${url}:`, urlError instanceof Error ? urlError.message : 'Unknown error');
+          const errorMsg = urlError instanceof Error ? urlError.message : 'Unknown error';
+          if (errorMsg.includes('Aborted')) {
+            console.log(`⏱️ Timeout connecting to ${url}`);
+          } else {
+            console.log(`❌ Failed to connect to ${url}: ${errorMsg}`);
+          }
           continue;
         }
       }

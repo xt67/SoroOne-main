@@ -24,26 +24,30 @@ export const getOllamaConfig = (): OllamaConfig => {
   };
 
   if (Platform.OS === 'web') {
-    // Web platform - can only access localhost
+    // Web platform - can access both proxy and direct Ollama
     config.baseUrls = [
-      'http://localhost:11434',
-      'http://127.0.0.1:11434'
+      'http://localhost:3001/ollama', // Proxy server (preferred)
+      'http://localhost:11434',       // Direct Ollama
+      'http://127.0.0.1:11434'        // Alternative direct access
     ];
   } else if (Platform.OS === 'android') {
-    // Android platform
+    // Android platform - use proxy server through Expo tunnel
     config.baseUrls = [
-      'http://10.0.2.2:11434',    // Android emulator host
-      'http://localhost:11434',   // If running on device with proxy
-      'http://127.0.0.1:11434',   // Local host alternative
-      'http://192.168.1.100:11434', // Common LAN IP (adjust as needed)
-      'http://192.168.31.108:11434' // Your current network IP
+      'http://localhost:3001/ollama',  // Proxy server through tunnel (best option)
+      'http://127.0.0.1:3001/ollama',  // Alternative proxy access
+      'http://localhost:11434',        // Direct localhost for tunneling
+      'http://127.0.0.1:11434',        // Alternative localhost  
+      'http://10.0.2.2:11434',         // Android emulator host
+      'http://192.168.31.108:11434',   // Your current network IP
     ];
   } else if (Platform.OS === 'ios') {
-    // iOS platform
+    // iOS platform - use proxy server through Expo tunnel
     config.baseUrls = [
-      'http://localhost:11434',   // iOS simulator can access localhost
-      'http://127.0.0.1:11434',   // Alternative localhost
-      'http://192.168.31.108:11434' // Your network IP for real device
+      'http://localhost:3001/ollama',  // Proxy server through tunnel (best option)
+      'http://127.0.0.1:3001/ollama',  // Alternative proxy access
+      'http://localhost:11434',        // Direct localhost for simulator
+      'http://127.0.0.1:11434',        // Alternative localhost
+      'http://192.168.31.108:11434',   // Your network IP for real device
     ];
   }
 

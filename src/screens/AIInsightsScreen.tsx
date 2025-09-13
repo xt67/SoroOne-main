@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../styles/ThemeProvider';
 import { dataService } from '../services/DataService';
 import { ollamaService } from '../services/OllamaService';
@@ -45,6 +46,12 @@ export default function AIInsightsScreen() {
     initializeAI();
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      loadCurrentDataset();
+    }, [])
+  );
+
   const initializeAI = async () => {
     try {
       console.log('Initializing AI service...');
@@ -52,14 +59,19 @@ export default function AIInsightsScreen() {
       setIsOllamaAvailable(ollamaAvailable);
       
       if (!ollamaAvailable) {
-        Alert.alert(
-          'AI Service Setup Required',
-          'Ollama with Mistral model not accessible. The app will use basic analysis meanwhile.',
-          [
-            { text: 'OK', style: 'cancel' },
-            { text: 'Retry', onPress: initializeAI }
-          ]
-        );
+        // Don't show alert on mobile platforms - this is expected in tunnel mode
+        if (Platform.OS === 'web') {
+          Alert.alert(
+            'AI Service Setup Required',
+            'Ollama with Mistral model not accessible. Please ensure Ollama is running.',
+            [
+              { text: 'OK', style: 'cancel' },
+              { text: 'Retry', onPress: initializeAI }
+            ]
+          );
+        } else {
+          console.log('💡 AI features require web version or development build when using Expo tunnel');
+        }
       }
 
       await loadCurrentDataset();
@@ -74,12 +86,18 @@ export default function AIInsightsScreen() {
     try {
       await dataService.initialize();
       const datasets = await dataService.getDatasets();
+      console.log('AIInsightsScreen: Loaded datasets:', datasets.length);
       if (datasets.length > 0) {
         const latestDataset = datasets[datasets.length - 1];
         setCurrentDataset(latestDataset);
+        console.log('AIInsightsScreen: Set current dataset with', latestDataset.data?.length || 0, 'rows');
+      } else {
+        console.log('AIInsightsScreen: No datasets found');
+        setCurrentDataset(null);
       }
     } catch (error) {
       console.error('Failed to load dataset:', error);
+      setCurrentDataset(null);
     }
   };
 
@@ -177,13 +195,18 @@ For now, I can tell you that your dataset "${currentDataset?.name || 'your data'
           <Ionicons name="analytics-outline" size={32} color={theme.colors.primary} />
         </View>
         <Text style={[styles.welcomeTitle, { color: theme.colors.textPrimary }]}>
-          What can I help with?
+          Chat with your data
         </Text>
         <Text style={[styles.welcomeSubtitle, { color: theme.colors.textSecondary }]}>
-          {currentDataset ? `Ask questions about your "${currentDataset.name}" dataset` : 'Upload a dataset to get started with AI insights'}
+          {!isOllamaAvailable && (Platform.OS === 'android' || Platform.OS === 'ios') 
+            ? `Dataset: ${currentDataset?.name || 'No dataset'} • AI features require web version when using Expo tunnel`
+            : currentDataset 
+            ? `Ask questions about your "${currentDataset.name}" dataset using AI`
+            : 'Upload a dataset to get started with AI insights'
+          }
         </Text>
 
-        {currentDataset && (
+        {currentDataset && isOllamaAvailable && (
           <View style={styles.suggestionsContainer}>
             {suggestedQuestions.map((suggestion, index) => (
               <TouchableOpacity
@@ -198,6 +221,15 @@ For now, I can tell you that your dataset "${currentDataset?.name || 'your data'
             ))}
           </View>
         )}
+
+        {currentDataset && !isOllamaAvailable && (Platform.OS === 'android' || Platform.OS === 'ios') && (
+          <View style={[styles.infoContainer, { backgroundColor: theme.colors.surface }]}>
+            <Ionicons name="information-circle-outline" size={20} color={theme.colors.textSecondary} />
+            <Text style={[styles.infoText, { color: theme.colors.textSecondary }]}>
+              AI chat is not available in mobile Expo tunnel mode. Use the web version for full AI features.
+            </Text>
+          </View>
+        )}
       </View>
     );
   };
@@ -207,7 +239,7 @@ For now, I can tell you that your dataset "${currentDataset?.name || 'your data'
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
         <ScrollView
           ref={scrollViewRef}
@@ -274,9 +306,13 @@ For now, I can tell you that your dataset "${currentDataset?.name || 'your data'
               </Text>
             </View>
 
-            {currentDataset && (
+            {currentDataset ? (
               <Text style={[styles.datasetInfo, { color: theme.colors.textSecondary }]}>
-                {currentDataset.data.length} rows loaded
+                {currentDataset.data?.length || 0} rows loaded
+              </Text>
+            ) : (
+              <Text style={[styles.datasetInfo, { color: theme.colors.textSecondary }]}>
+                No dataset loaded
               </Text>
             )}
           </View>
@@ -299,7 +335,9 @@ const styles = StyleSheet.create({
   messagesContent: {
     flexGrow: 1,
     paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 12,
+    paddingBottom: 4, // Reduced from 8
+    justifyContent: 'center', // Center content when empty
   },
   messageContainer: {
     marginBottom: 16,
@@ -331,40 +369,40 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 32,
-    paddingBottom: 100,
+    paddingBottom: 20, // Reduced from 60 to 20
   },
   logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 60, // Reduced from 80
+    height: 60, // Reduced from 80
+    borderRadius: 30, // Reduced from 40
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 20, // Reduced from 24
   },
   welcomeTitle: {
-    fontSize: 28,
+    fontSize: 24, // Reduced from 28
     fontWeight: '600',
-    marginBottom: 8,
+    marginBottom: 6, // Reduced from 8
     textAlign: 'center',
   },
   welcomeSubtitle: {
-    fontSize: 16,
+    fontSize: 14, // Reduced from 16
     textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: 32,
+    lineHeight: 20, // Reduced from 22
+    marginBottom: 24, // Reduced from 32
   },
   suggestionsContainer: {
     width: '100%',
-    gap: 12,
+    gap: 8, // Reduced from 12
   },
   suggestionChip: {
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    borderRadius: 25,
+    paddingHorizontal: 12, // Reduced from 20
+    paddingVertical: 8, // Reduced from 14
+    borderRadius: 16, // Reduced from 25
     alignItems: 'center',
   },
   suggestionText: {
-    fontSize: 15,
+    fontSize: 13, // Reduced from 15
     fontWeight: '500',
   },
   typingIndicator: {
@@ -378,8 +416,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 16,
+    paddingTop: 8, // Reduced from 12
+    paddingBottom: 8, // Reduced from 16
     borderTopWidth: 1,
     borderTopColor: 'rgba(255, 255, 255, 0.1)',
   },
@@ -388,8 +426,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     borderRadius: 25,
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    minHeight: 50,
+    paddingVertical: 10, // Reduced from 12
+    minHeight: 46, // Reduced from 50
   },
   textInput: {
     flex: 1,
@@ -409,7 +447,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 6, // Reduced from 8
     paddingHorizontal: 4,
   },
   statusIndicator: {
@@ -428,5 +466,18 @@ const styles = StyleSheet.create({
   },
   datasetInfo: {
     fontSize: 12,
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  infoText: {
+    fontSize: 14,
+    marginLeft: 8,
+    flex: 1,
+    lineHeight: 20,
   },
 });
